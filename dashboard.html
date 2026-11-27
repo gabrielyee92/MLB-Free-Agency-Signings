@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLB Free Agency — Live</title>
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --line: #2a313c; --text: #e6edf3;
+    --muted: #8b949e; --gold: #f2c14e; --gold-bg: #2b2412; --green: #3fb950;
+    --red: #f85149;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+           padding: 16px 24px; border-bottom: 1px solid var(--line); }
+  h1 { font-size: 20px; margin: 0; letter-spacing: .3px; }
+  .live { display: inline-flex; align-items: center; gap: 6px; color: var(--red);
+          font-weight: 700; font-size: 12px; margin-left: 8px; }
+  .live::before { content: ""; width: 8px; height: 8px; border-radius: 50%;
+                  background: var(--red); animation: pulse 1.6s infinite; }
+  @keyframes pulse { 50% { opacity: .25; } }
+  .stat { display: flex; flex-direction: column; }
+  .stat b { font-size: 20px; font-variant-numeric: tabular-nums; }
+  .stat span { color: var(--muted); font-size: 12px; }
+  .bar { width: 160px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--green); }
+  .status { margin-left: auto; color: var(--muted); font-size: 12px; text-align: right; }
+  .status .err { color: var(--red); }
+  button { background: var(--panel); color: var(--text); border: 1px solid var(--line);
+           border-radius: 6px; padding: 6px 12px; cursor: pointer; font: inherit; }
+  button:hover { border-color: var(--muted); }
+
+  .controls { display: flex; gap: 12px; padding: 12px 24px; flex-wrap: wrap; align-items: center; }
+  input, select { background: var(--panel); color: var(--text); border: 1px solid var(--line);
+                  border-radius: 6px; padding: 6px 10px; font: inherit; }
+  input[type=search] { width: 240px; }
+  label { color: var(--muted); display: flex; gap: 6px; align-items: center; }
+
+  .feed { margin: 0 24px 12px; padding: 10px 14px; background: var(--panel);
+          border: 1px solid var(--line); border-radius: 8px; display: flex; gap: 18px;
+          overflow-x: auto; white-space: nowrap; font-size: 13px; }
+  .feed .lbl { color: var(--muted); font-weight: 600; }
+  .feed .big { color: var(--gold); font-weight: 600; }
+
+  main { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; padding: 0 24px 24px; }
+  @media (max-width: 1100px) { main { grid-template-columns: 1fr; } }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+            overflow: hidden; display: flex; flex-direction: column; max-height: calc(100vh - 210px); }
+  section h2 { font-size: 14px; margin: 0; padding: 12px 14px; border-bottom: 1px solid var(--line);
+               display: flex; justify-content: space-between; }
+  section h2 span { color: var(--muted); font-weight: 400; }
+  .scroll { overflow-y: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th { position: sticky; top: 0; background: var(--panel); text-align: left; color: var(--muted);
+       font-weight: 500; font-size: 12px; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  td { padding: 7px 10px; border-bottom: 1px solid var(--line); }
+  td.num, th.num { text-align: right; }
+  tr.big td { background: var(--gold-bg); }
+  tr.big td:first-child { box-shadow: inset 3px 0 var(--gold); }
+  tr.fresh td { animation: flash 3s ease-out; }
+  @keyframes flash { from { background: #1f4d2c; } }
+  .star { color: var(--gold); }
+  .muted { color: var(--muted); font-size: 12px; }
+  .divider td { color: var(--muted); font-size: 11px; text-transform: uppercase;
+                letter-spacing: .6px; padding: 10px; background: var(--bg); }
+
+  /* pop-ups */
+  #toasts { position: fixed; top: 16px; right: 16px; display: flex; flex-direction: column;
+            gap: 10px; z-index: 10; width: 340px; }
+  .toast { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--green);
+           border-radius: 8px; padding: 12px 14px; box-shadow: 0 8px 24px #0008;
+           animation: slide .3s ease-out; }
+  .toast b { display: block; font-size: 15px; }
+  .toast.reported { border-left-color: #58a6ff; }
+  .toast a { color: #58a6ff; }
+  .tag { font-size: 10px; font-weight: 700; color: #58a6ff; border: 1px solid #58a6ff;
+         border-radius: 4px; padding: 0 4px; margin-left: 6px; vertical-align: 1px; }
+  @keyframes slide { from { transform: translateX(120%); } }
+  #banner { position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+            background: #000a; z-index: 20; }
+  #banner.show { display: flex; }
+  #banner .card { background: var(--gold-bg); border: 2px solid var(--gold); border-radius: 14px;
+                  padding: 32px 48px; text-align: center; animation: pop .4s ease-out; max-width: 90vw; }
+  @keyframes pop { from { transform: scale(.7); opacity: 0; } }
+  #banner .kicker { color: var(--gold); font-weight: 800; letter-spacing: 2px; font-size: 13px; }
+  #banner .who { font-size: 40px; font-weight: 800; margin: 8px 0; }
+  #banner .deal { font-size: 20px; }
+  #banner .sub { color: var(--muted); margin-top: 10px; font-size: 13px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>MLB Free Agency <span class="live">LIVE</span></h1>
+  <div class="stat"><b id="nSigned">–</b><span>signed</span></div>
+  <div class="stat"><b id="nLeft">–</b><span>still available</span></div>
+  <div class="stat"><b id="nBigLeft">–</b><span>★ big names left</span></div>
+  <div class="bar"><i id="progress" style="width:0"></i></div>
+  <div class="status"><div id="checked">Connecting…</div>
+    <button id="refresh" style="margin-top:6px">Check MLB now</button></div>
+</header>
+
+<div class="controls">
+  <input type="search" id="q" placeholder="Search player or team…">
+  <select id="pos"><option value="">All positions</option></select>
+  <label><input type="checkbox" id="bigOnly"> ★ Big names only</label>
+  <label><input type="checkbox" id="hideMinors" checked> Hide minor-league deals</label>
+  <label><input type="checkbox" id="sound" checked> Sound for big names</label>
+</div>
+
+<div class="feed" id="feed"><span class="lbl">LATEST</span><span class="muted">Waiting for signings…</span></div>
+
+<main>
+  <section>
+    <h2>Signings <span id="sCount"></span></h2>
+    <div class="scroll"><table>
+      <thead><tr><th></th><th>Player</th><th>Pos</th><th>From</th><th>To</th>
+        <th class="num">Yrs</th><th class="num">Total</th><th class="num">AAV</th><th>Date</th><th>Notes</th></tr></thead>
+      <tbody id="signed"></tbody></table></div>
+  </section>
+  <section>
+    <h2>Still Available <span id="aCount"></span></h2>
+    <div class="scroll"><table>
+      <thead><tr><th></th><th class="num">Rank</th><th>Player</th><th>Pos</th><th>2026</th><th>Notes</th></tr></thead>
+      <tbody id="avail"></tbody></table></div>
+  </section>
+</main>
+
+<div id="toasts"></div>
+<div id="banner"><div class="card">
+  <div class="kicker">★ BIG NAME SIGNING ★</div>
+  <div class="who" id="bWho"></div><div class="deal" id="bDeal"></div>
+  <div class="sub" id="bSub"></div></div></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = m => m ? "$" + (+m).toLocaleString(undefined, {maximumFractionDigits: 2}) + "M" : "–";
+const deal = e => e.years && e.total_m ? `${e.years} yr / ${money(e.total_m)}` : "terms not yet reported";
+const srcLabel = e => ({"MLB official": "Official (MLB transactions)",
+  "Reported": "Reported · MLB Trade Rumors", "manual": "Added manually"})[e.source] || e.source;
+
+let data = null, firstLoad = true, freshNames = new Set();
+const seen = new Set(JSON.parse(localStorage.getItem("faSeen") || "[]"));
+const remember = () => localStorage.setItem("faSeen", JSON.stringify([...seen].slice(-1000)));
+
+async function tick() {
+  try {
+    const r = await fetch("/api/state", {cache: "no-store"});
+    data = await r.json();
+  } catch { $("checked").innerHTML = '<span class="err">Dashboard server is not running</span>'; return; }
+
+  const fresh = data.events.filter(e => !seen.has(e.id));
+  fresh.forEach(e => seen.add(e.id)); remember();
+  if (!firstLoad) {
+    fresh.forEach(e => freshNames.add(e.name));
+    const bigs = fresh.filter(e => e.big);
+    fresh.filter(e => !e.big).forEach(toast);
+    if (bigs.length) banner(bigs);
+  }
+  firstLoad = false;
+  render();
+}
+
+function toast(e) {
+  const t = document.createElement("div");
+  t.className = "toast" + (e.source === "Reported" ? " reported" : "");
+  const src = e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">${esc(srcLabel(e))}</a>` : esc(srcLabel(e));
+  t.innerHTML = `<b>${esc(e.name)} → ${esc(e.team)}</b>${esc(e.pos)} · ${esc(deal(e))}
+    <div class="muted">${src}</div>`;
+  $("toasts").prepend(t);
+  setTimeout(() => t.remove(), 9000);
+}
+
+let bannerQueue = [];
+function banner(list) {
+  bannerQueue.push(...list);
+  if ($("banner").classList.contains("show")) return;
+  showNextBanner();
+}
+function showNextBanner() {
+  const e = bannerQueue.shift();
+  if (!e) { $("banner").classList.remove("show"); return; }
+  $("bWho").textContent = e.name;
+  $("bDeal").textContent = `${e.pos} · ${e.old_team ? e.old_team + " → " : ""}${e.team} · ${deal(e)}`;
+  $("bSub").textContent = (e.rank ? `#${e.rank} free agent · ` : "") + srcLabel(e) + " · click to dismiss";
+  $("banner").classList.add("show");
+  if ($("sound").checked) chime();
+  clearTimeout(showNextBanner.t);
+  showNextBanner.t = setTimeout(showNextBanner, 10000);
+}
+$("banner").onclick = () => { clearTimeout(showNextBanner.t); showNextBanner(); };
+
+function chime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [660, 880, 1320].forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = f; o.connect(g); g.connect(ctx.destination);
+      const t = ctx.currentTime + i * 0.15;
+      g.gain.setValueAtTime(0.15, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+      o.start(t); o.stop(t + 0.4);
+    });
+  } catch {}
+}
+
+function filtered(list) {
+  const q = $("q").value.trim().toLowerCase(), pos = $("pos").value;
+  return list.filter(p =>
+    (!q || [p.name, p.old_team, p.new_team].join(" ").toLowerCase().includes(q)) &&
+    (!pos || p.pos === pos) && (!$("bigOnly").checked || p.big));
+}
+
+function render() {
+  if (!data) return;
+  const all = data.players;
+  const signed = all.filter(p => p.signed), left = all.filter(p => !p.signed);
+  $("nSigned").textContent = signed.length;
+  $("nLeft").textContent = left.length;
+  $("nBigLeft").textContent = left.filter(p => p.big).length;
+  $("progress").style.width = (100 * signed.length / all.length) + "%";
+  $("checked").innerHTML = data.last_error
+    ? `<span class="err">MLB check failed: ${esc(data.last_error)}</span>`
+    : data.last_check ? "MLB last checked " + new Date(data.last_check).toLocaleTimeString()
+      + (data.last_news_check ? " · news " + new Date(data.last_news_check).toLocaleTimeString() : "")
+      : "Checking MLB…";
+
+  const posSel = $("pos");
+  if (posSel.options.length === 1)
+    [...new Set(all.map(p => p.pos))].sort().forEach(p => posSel.add(new Option(p, p)));
+
+  let s = filtered(signed);
+  if ($("hideMinors").checked) s = s.filter(p => !/minor league/i.test(p.notes || ""));
+  const a = filtered(left);
+  $("sCount").textContent = s.length;
+  $("aCount").textContent = a.length;
+  $("signed").innerHTML = rows(s, signedRow, 10);
+  $("avail").innerHTML = rows(a, availRow, 6);
+
+  const recent = data.events.slice(-12).reverse();
+  $("feed").innerHTML = '<span class="lbl">LATEST</span>' + (recent.length
+    ? recent.map(e => `<span class="${e.big ? "big" : ""}">${e.big ? "★ " : ""}${esc(e.name)} → ${esc(e.team)}</span>`).join("")
+    : '<span class="muted">New signings will appear here as they happen.</span>');
+}
+
+function rows(list, fn, cols) {
+  let html = "", inBig = null;
+  for (const p of list) {
+    if (inBig !== p.big) {
+      html += `<tr class="divider"><td colspan="${cols}">${p.big ? "★ Big names" : "Everyone else"}</td></tr>`;
+      inBig = p.big;
+    }
+    html += fn(p);
+  }
+  return html || `<tr><td colspan="${cols}" class="muted" style="padding:16px">No players match.</td></tr>`;
+}
+const cls = p => [p.big ? "big" : "", freshNames.has(p.name) ? "fresh" : ""].join(" ");
+const star = p => p.big ? '<span class="star">★</span>' : "";
+const reportedTag = p => /Reported, not yet official/.test(p.notes || "") ? '<span class="tag">REPORTED</span>' : "";
+const signedRow = p => `<tr class="${cls(p)}"><td>${star(p)}</td><td>${esc(p.name)}${reportedTag(p)}</td><td>${esc(p.pos)}</td>
+  <td>${esc(p.old_team)}</td><td><b>${esc(p.new_team)}</b></td><td class="num">${p.years ?? "–"}</td>
+  <td class="num">${money(p.total_m)}</td><td class="num">${money(p.aav_m)}</td>
+  <td class="muted">${esc(p.signed_date || "")}</td><td class="muted">${esc(p.notes)}</td></tr>`;
+const availRow = p => `<tr class="${cls(p)}"><td>${star(p)}</td><td class="num">${p.rank ?? "–"}</td>
+  <td>${esc(p.name)}</td><td>${esc(p.pos)}</td><td>${esc(p.old_team)}</td><td class="muted">${esc(p.notes)}</td></tr>`;
+
+["q", "pos", "bigOnly", "hideMinors"].forEach(id => $(id).addEventListener("input", render));
+$("refresh").onclick = async () => {
+  $("refresh").disabled = true; $("refresh").textContent = "Checking…";
+  try { await fetch("/api/refresh", {method: "POST"}); await tick(); } catch {}
+  $("refresh").disabled = false; $("refresh").textContent = "Check MLB now";
+};
+
+tick();
+setInterval(tick, 5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.claude/
+# runtime state written by the live dashboard
+signing_events.json
