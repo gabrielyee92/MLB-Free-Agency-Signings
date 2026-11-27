@@ -6,11 +6,13 @@ Pure Python standard library: nothing to install.
 
 ## Live dashboard
 
+Double-click **Start Dashboard.bat**, or run:
+
 ```
-python live_dashboard.py
+python fa_tracker.py live
 ```
 
-Then open http://localhost:8000.
+It opens http://localhost:8000 in your browser.
 
 - Checks **MLB's official transactions** feed for free agent signings.
 - Checks the **MLB Trade Rumors** news feed for *reported* deals, including team and contract terms. These deals are tagged REPORTED until MLB makes them official. Rumors ("interest", "talks", "nearing a deal") are ignored.
