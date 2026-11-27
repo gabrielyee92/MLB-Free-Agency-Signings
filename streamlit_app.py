@@ -112,8 +112,7 @@ def render():
     with st.sidebar:
         st.header("Filters")
         q = st.text_input("Search player or team").strip().lower()
-        with ld.lock:
-            positions = sorted({p["pos"] for p in ld.load()})
+        positions = sorted({p["pos"] for p in ld.load()})
         pos = st.selectbox("Position", ["All"] + positions)
         big_only = st.toggle("★ Big names only")
         hide_minors = st.toggle("Hide minor-league deals", value=True)
@@ -131,8 +130,8 @@ def render():
 
     @st.fragment(run_every=REFRESH)
     def board():
-        with ld.lock:
-            data = ld.snapshot()
+        # no lock: reading never waits on a slow feed check
+        data = ld.snapshot()
         players, events = data["players"], data["events"]
         pop_ups(events)
 

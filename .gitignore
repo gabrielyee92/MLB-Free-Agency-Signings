@@ -4,3 +4,4 @@ __pycache__/
 # runtime state written by the live dashboard
 signing_events.json
 MLB Free Agency Tracker/
+free_agents.tmp

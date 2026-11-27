@@ -43,8 +43,11 @@ def load():
 
 
 def save(players):
-    with DATA_FILE.open("w", encoding="utf-8") as f:
+    # write to a temp file, then swap it in, so readers never see half a file
+    tmp = DATA_FILE.with_suffix(".tmp")
+    with tmp.open("w", encoding="utf-8") as f:
         json.dump(players, f, indent=1, ensure_ascii=False)
+    tmp.replace(DATA_FILE)
 
 
 def find(players, name):
