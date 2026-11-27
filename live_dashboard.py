@@ -1,25 +1,15 @@
 """Live MLB Free Agency Dashboard.
 
-Run:   python live_dashboard.py            (then open http://localhost:8000)
-       python live_dashboard.py --poll 2   (check MLB every 2 minutes)
+    python live_dashboard.py              opens http://localhost:8000
+    python live_dashboard.py --poll 2     check every 2 minutes (default 5)
+    python live_dashboard.py --no-news    official signings only
 
-What it does
-  * Every few minutes it checks MLB's official transactions feed
-    (statsapi.mlb.com) for "Signed as Free Agent" moves. When one matches a
-    player still on the board, that player is marked signed automatically.
-  * It also watches free_agents.json, so signings you enter yourself with
-    `python fa_tracker.py sign ...` (for example, to add contract terms or a
-    reported deal that isn't official yet) show up on the dashboard too.
-  * The browser page refreshes itself and shows a pop-up for every new
-    signing. Big names get a bigger gold banner.
-
-  * It also reads MLB Trade Rumors' news feed for REPORTED deals
-    ("Mets, Tarik Skubal Agree To Nine-Year Deal"), pulls the team and
-    contract terms out of the story, and tags the player "Reported, not yet
-    official" until MLB's feed confirms it. Turn this off with --no-news.
-
-Headlines that are only rumors (interest, talks, nearing a deal) are ignored.
-If a reported deal is wrong or missing terms, fix it with fa_tracker.py.
+Three ways a signing reaches the board, each with a pop-up:
+  * MLB official  - statsapi.mlb.com "Signed as Free Agent" transactions
+  * Reported      - MLB Trade Rumors headlines like "Mets, Tarik Skubal Agree
+                    To Nine-Year Deal" (team + terms parsed from the story).
+                    Tagged "Reported, not yet official" until MLB confirms.
+  * Manual        - anything you change with `python fa_tracker.py sign ...`
 """
 
 import argparse
@@ -30,6 +20,7 @@ import threading
 import time
 import unicodedata
 import urllib.request
+import webbrowser
 import xml.etree.ElementTree as ET
 from datetime import date, datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -40,144 +31,14 @@ from fa_tracker import DATA_FILE, aav, bigness, is_big, load, save
 HERE = Path(__file__).parent
 PAGE = HERE / "dashboard.html"
 EVENTS_FILE = HERE / "signing_events.json"
-API = "https://statsapi.mlb.com/api/v1"
-OFFSEASON_START = "2026-11-01"
-SIGN_CODES = {"SFA"}  # "Signed as Free Agent"
-REPORTED = "Reported, not yet official"
 
-lock = threading.Lock()
-state = {"events": [], "seen_tx": [], "seen_news": [], "last_check": None,
-         "last_news_check": None, "last_error": None,
-         "signed_snapshot": None, "file_mtime": 0}
-
-
-def norm(name):
-    s = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
-    return " ".join(s.lower().replace(".", "").replace("'", "").split())
-
-
-def get_json(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "fa-tracker/1.0"})
-    with urllib.request.urlopen(req, timeout=20) as r:
-        return json.load(r)
-
-
-_teams = {}
-
-
-def team_abbr(team):
-    if not team:
-        return ""
-    if not _teams:
-        try:
-            data = get_json(f"{API}/teams?sportId=1")
-            _teams.update({t["id"]: t["abbreviation"] for t in data["teams"]})
-        except Exception:
-            pass
-    return _teams.get(team.get("id"), team.get("name", ""))
-
-
-# ---------- events ----------
-
-def load_events():
-    if EVENTS_FILE.exists():
-        saved = json.loads(EVENTS_FILE.read_text(encoding="utf-8"))
-        state["events"] = saved.get("events", [])
-        state["seen_tx"] = saved.get("seen_tx", [])
-        state["seen_news"] = saved.get("seen_news", [])
-
-
-def save_events():
-    EVENTS_FILE.write_text(json.dumps(
-        {"events": state["events"][-500:], "seen_tx": state["seen_tx"][-5000:],
-         "seen_news": state["seen_news"][-2000:]},
-        indent=1, ensure_ascii=False), encoding="utf-8")
-
-
-def add_event(p, source, link=None, headline=None):
-    state["events"].append({
-        "id": f"{p['name']}|{p.get('new_team')}|{time.time()}",
-        "time": datetime.now().isoformat(timespec="seconds"),
-        "name": p["name"], "pos": p.get("pos", ""), "team": p.get("new_team", ""),
-        "old_team": p.get("old_team", ""), "years": p.get("years"),
-        "total_m": p.get("total_m"), "big": bool(is_big(p)),
-        "rank": p.get("rank"), "notes": p.get("notes", ""), "source": source,
-        "link": link, "headline": headline,
-    })
-
-
-# ---------- watching the JSON file (manual `fa_tracker.py sign`) ----------
-
-def check_file():
-    """Turn anything newly signed in free_agents.json into a pop-up event."""
-    try:
-        mtime = DATA_FILE.stat().st_mtime
-    except FileNotFoundError:
-        return
-    if mtime == state["file_mtime"]:
-        return
-    state["file_mtime"] = mtime
-    players = load()
-    signed = {p["name"]: p for p in players if p.get("signed")}
-    if state["signed_snapshot"] is not None:
-        for name, p in signed.items():
-            if name not in state["signed_snapshot"]:
-                add_event(p, "manual")
-        save_events()
-    state["signed_snapshot"] = set(signed)
-
-
-# ---------- polling MLB ----------
-
-def check_mlb():
-    url = (f"{API}/transactions?sportId=1&startDate={OFFSEASON_START}"
-           f"&endDate={date.today().isoformat()}")
-    try:
-        txs = get_json(url).get("transactions", [])
-    except Exception as e:
-        state["last_error"] = f"{type(e).__name__}: {e}"
-        return
-    state["last_error"] = None
-    state["last_check"] = datetime.now().isoformat(timespec="seconds")
-
-    players = load()
-    by_name = {norm(p["name"]): p for p in players}
-    seen = set(state["seen_tx"])
-    changed = False
-    for tx in txs:
-        tid = tx.get("id")
-        if tid in seen or tx.get("typeCode") not in SIGN_CODES:
-            continue
-        seen.add(tid)
-        state["seen_tx"].append(tid)
-        p = by_name.get(norm(tx.get("person", {}).get("fullName", "")))
-        if p and REPORTED in p.get("notes", ""):
-            # a reported deal just became official: confirm team, drop the tag
-            p["new_team"] = team_abbr(tx.get("toTeam")) or p.get("new_team")
-            p["notes"] = "; ".join(x for x in p["notes"].split("; ") if x != REPORTED)
-            changed = True
-            continue
-        if not p or p.get("signed"):
-            continue  # not one of our free agents, or already marked signed
-        desc = tx.get("description", "")
-        p.update(signed=True, new_team=team_abbr(tx.get("toTeam")),
-                 signed_date=tx.get("date") or date.today().isoformat())
-        if "minor league" in desc.lower() and "minor league" not in p.get("notes", "").lower():
-            p["notes"] = "; ".join(x for x in [p.get("notes"), "Minor league deal"] if x)
-        add_event(p, "MLB official")
-        changed = True
-    if changed:
-        save(players)
-        state["file_mtime"] = DATA_FILE.stat().st_mtime
-        state["signed_snapshot"] = {p["name"] for p in players if p.get("signed")}
-    save_events()
-
-
-# ---------- polling news for REPORTED deals ----------
-
+MLB_FEED = "https://statsapi.mlb.com/api/v1/transactions?sportId=1&startDate=2026-11-01&endDate={today}"
 NEWS_FEED = "https://www.mlbtraderumors.com/feed"
+REPORTED = "Reported, not yet official"
+MINORS = "Minor league deal"
+FILE_CHECK_SECONDS = 3
 
-TEAMS = {  # nickname as used in headlines -> abbreviation
+TEAMS = {  # nickname -> abbreviation (matches headlines and MLB team names)
     "Angels": "LAA", "Astros": "HOU", "Athletics": "ATH", "A's": "ATH",
     "Blue Jays": "TOR", "Braves": "ATL", "Brewers": "MIL", "Cardinals": "STL",
     "Cubs": "CHC", "Diamondbacks": "ARI", "D-backs": "ARI", "Dodgers": "LAD",
@@ -187,106 +48,211 @@ TEAMS = {  # nickname as used in headlines -> abbreviation
     "Red Sox": "BOS", "Reds": "CIN", "Rockies": "COL", "Royals": "KC",
     "Tigers": "DET", "Twins": "MIN", "White Sox": "CWS", "Yankees": "NYY",
 }
-# headline must say a deal happened...
-DEAL_WORDS = re.compile(r"\b(sign|signs|re-sign|re-signs|agree|agrees|signing|to sign)\b", re.I)
-# ...and must not just be a rumor about one
+# A headline counts only if it says a deal happened and isn't just a rumor.
+DEAL_WORDS = re.compile(r"\b(sign|signs|re-sign|re-signs|agree|agrees|signing)\b", re.I)
 RUMOR_WORDS = re.compile(
     r"\b(rumou?rs?|interest|interested|pursu\w*|talks?|discuss\w*|asking|seeking|"
     r"nearing|close to|expected|could|would|might|likely|considering|"
     r"yet to|not|won't|unlikely|extension|option|offer|targets?|eyeing|linked|"
     r"chat|mailbag|poll|predictions?|tracker|recap)\b", re.I)
+TERMS_RE = re.compile(r"\b(\w+)[- ]years?,?\s*\$([\d.]+)\s*(MM|M|million|B|billion)", re.I)
 NUM_WORDS = {w: i for i, w in enumerate(
     "zero one two three four five six seven eight nine ten eleven twelve "
     "thirteen fourteen fifteen".split())}
-TERMS_RE = re.compile(
-    r"\b(\w+)[- ]years?,?\s*\$([\d.]+)\s*(MM|M|million|B|billion)", re.I)
+MINORS_RE = re.compile(r"minor[s -]league|minors contract", re.I)
+
+lock = threading.Lock()
+state = {"events": [], "seen_tx": [], "seen_news": [], "signed": None, "mtime": 0,
+         "checked": {"mlb": None, "news": None}, "errors": {"mlb": None, "news": None}}
 
 
-def parse_terms(text):
-    m = TERMS_RE.search(text)
-    if not m:
-        return None, None
-    yrs_word, amount, unit = m.groups()
-    yrs = int(yrs_word) if yrs_word.isdigit() else NUM_WORDS.get(yrs_word.lower())
-    total = float(amount) * (1000 if unit.lower().startswith("b") else 1)
-    return yrs, total
+# ---------- helpers ----------
+
+def norm(name):
+    """Accent-, case- and punctuation-insensitive form of a name."""
+    s = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
+    return " ".join(s.lower().replace(".", "").replace("'", "").split())
 
 
-def find_team(title):
-    hits = [(title.find(n), abbr) for n, abbr in TEAMS.items() if n in title]
-    hits = [h for h in hits if h[0] >= 0]
+def fetch(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "fa-tracker/1.0"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return r.read()
+
+
+def find_team(text):
+    """Abbreviation of the first team nickname that appears in text."""
+    hits = [(text.find(n), abbr) for n, abbr in TEAMS.items() if n in text]
     return min(hits)[1] if hits else ""
 
 
-def strip_html(s):
-    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", s or ""))).strip()
+def parse_terms(text):
+    """'a five-year, $135MM deal' -> (5, 135.0)"""
+    m = TERMS_RE.search(text)
+    if not m:
+        return None, None
+    yrs, amount, unit = m.groups()
+    yrs = int(yrs) if yrs.isdigit() else NUM_WORDS.get(yrs.lower())
+    return yrs, float(amount) * (1000 if unit.lower().startswith("b") else 1)
+
+
+def add_note(p, note):
+    notes = [n for n in p.get("notes", "").split("; ") if n]
+    if note not in notes:
+        p["notes"] = "; ".join(notes + [note])
+
+
+def drop_note(p, note):
+    p["notes"] = "; ".join(n for n in p.get("notes", "").split("; ") if n and n != note)
+
+
+# ---------- events (what the page pops up) ----------
+
+def load_events():
+    if EVENTS_FILE.exists():
+        saved = json.loads(EVENTS_FILE.read_text(encoding="utf-8"))
+        for k in ("events", "seen_tx", "seen_news"):
+            state[k] = saved.get(k, [])
+
+
+def save_events():
+    EVENTS_FILE.write_text(json.dumps(
+        {"events": state["events"][-500:], "seen_tx": state["seen_tx"][-5000:],
+         "seen_news": state["seen_news"][-2000:]}, indent=1, ensure_ascii=False),
+        encoding="utf-8")
+
+
+def add_event(p, source, link=None):
+    state["events"].append({
+        "id": f"{p['name']}|{p.get('new_team')}|{time.time()}",
+        "time": datetime.now().isoformat(timespec="seconds"),
+        "name": p["name"], "pos": p.get("pos", ""), "team": p.get("new_team", ""),
+        "old_team": p.get("old_team", ""), "years": p.get("years"),
+        "total_m": p.get("total_m"), "big": bool(is_big(p)), "rank": p.get("rank"),
+        "source": source, "link": link,
+    })
+
+
+def record_signing(p, source, team, signed_date=None, years=None, total=None,
+                   minors=False, link=None):
+    p.update(signed=True, new_team=team, years=years, total_m=total,
+             signed_date=signed_date or date.today().isoformat())
+    if minors:
+        add_note(p, MINORS)
+    if source == "Reported":
+        add_note(p, REPORTED)
+    add_event(p, source, link)
+
+
+def commit(players):
+    """Save the board and remember it, so the file watcher doesn't re-announce it."""
+    save(players)
+    state["mtime"] = DATA_FILE.stat().st_mtime
+    state["signed"] = {p["name"] for p in players if p.get("signed")}
+
+
+# ---------- sources ----------
+
+def check_file():
+    """Pop up anything newly signed by hand (fa_tracker.py sign ...)."""
+    try:
+        mtime = DATA_FILE.stat().st_mtime
+    except FileNotFoundError:
+        return
+    if mtime == state["mtime"]:
+        return
+    state["mtime"] = mtime
+    players = load()
+    signed = {p["name"] for p in players if p.get("signed")}
+    if state["signed"] is not None:
+        for p in players:
+            if p["name"] in signed - state["signed"]:
+                add_event(p, "manual")
+        save_events()
+    state["signed"] = signed
+
+
+def check_mlb():
+    txs = json.loads(fetch(MLB_FEED.format(today=date.today())))["transactions"]
+    players = load()
+    by_name = {norm(p["name"]): p for p in players}
+    seen, changed = set(state["seen_tx"]), False
+    for tx in txs:
+        if tx.get("id") in seen or tx.get("typeCode") != "SFA":
+            continue
+        state["seen_tx"].append(tx["id"])
+        p = by_name.get(norm(tx.get("person", {}).get("fullName", "")))
+        if not p:
+            continue
+        team = find_team(tx.get("toTeam", {}).get("name", ""))
+        if REPORTED in p.get("notes", ""):        # reported deal is now official
+            drop_note(p, REPORTED)
+            p["new_team"] = team or p["new_team"]
+            changed = True
+        elif not p.get("signed"):
+            record_signing(p, "MLB official", team, tx.get("date"),
+                           minors=bool(MINORS_RE.search(tx.get("description", ""))))
+            changed = True
+    if changed:
+        commit(players)
 
 
 def check_news():
-    try:
-        req = urllib.request.Request(NEWS_FEED, headers={"User-Agent": "fa-tracker/1.0"})
-        with urllib.request.urlopen(req, timeout=20) as r:
-            root = ET.fromstring(r.read())
-    except Exception as e:
-        state["last_error"] = f"News feed: {type(e).__name__}: {e}"
-        return
-    state["last_news_check"] = datetime.now().isoformat(timespec="seconds")
-
+    root = ET.fromstring(fetch(NEWS_FEED))
     players = load()
-    unsigned = [(norm(p["name"]), p) for p in players if not p.get("signed")]
-    seen = set(state["seen_news"])
-    changed = False
+    unsigned = {}
+    for p in players:
+        if not p.get("signed"):
+            unsigned.setdefault(norm(p["name"]), []).append(p)
+    seen, changed = set(state["seen_news"]), False
     for item in root.iter("item"):
         guid = item.findtext("guid") or item.findtext("link")
         if guid in seen:
             continue
-        seen.add(guid)
         state["seen_news"].append(guid)
         title = html.unescape(item.findtext("title") or "")
-        if not DEAL_WORDS.search(title) or RUMOR_WORDS.search(title):
-            continue
-        t_norm = norm(title)
-        hit_names = [n for n, p in unsigned if re.search(rf"\b{re.escape(n)}\b", t_norm)]
-        # skip names shared by two free agents (e.g. two "Luis Garcia"s)
-        matches = [p for n, p in unsigned if n in hit_names and hit_names.count(n) == 1]
         team = find_team(title)
-        if not matches or not team:
+        if not team or not DEAL_WORDS.search(title) or RUMOR_WORDS.search(title):
             continue
-        desc = strip_html(item.findtext("description"))
-        # contract terms only when the headline is about one player
-        yrs, total = parse_terms(desc) if len(matches) == 1 else (None, None)
-        minors = re.search(r"minor[s -]league|minors contract", title + " " + desc, re.I)
+        t = norm(title)
+        # names in the headline; skip names two free agents share
+        matches = [ps[0] for n, ps in unsigned.items()
+                   if len(ps) == 1 and re.search(rf"\b{re.escape(n)}\b", t)]
+        if not matches:
+            continue
+        desc = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ",
+                      item.findtext("description") or "")))
+        years, total = parse_terms(desc) if len(matches) == 1 else (None, None)
         for p in matches:
-            notes = [p.get("notes")] if p.get("notes") else []
-            if minors:
-                notes.append("Minor league deal")
-            notes.append(REPORTED)
-            p.update(signed=True, new_team=team, years=yrs, total_m=total,
-                     signed_date=date.today().isoformat(), notes="; ".join(notes))
-            add_event(p, "Reported", link=item.findtext("link"), headline=title)
-        unsigned = [(n, q) for n, q in unsigned if q not in matches]
+            record_signing(p, "Reported", team, years=years, total=total,
+                           minors=bool(MINORS_RE.search(title + " " + desc)),
+                           link=item.findtext("link"))
+            unsigned.pop(norm(p["name"]), None)
         changed = True
     if changed:
-        save(players)
-        state["file_mtime"] = DATA_FILE.stat().st_mtime
-        state["signed_snapshot"] = {p["name"] for p in players if p.get("signed")}
+        commit(players)
+
+
+def run_checks(news):
+    for name, check in [("mlb", check_mlb)] + ([("news", check_news)] if news else []):
+        try:
+            check()
+            state["checked"][name] = datetime.now().isoformat(timespec="seconds")
+            state["errors"][name] = None
+        except Exception as e:
+            state["errors"][name] = f"{type(e).__name__}: {e}"
     save_events()
 
 
-def poller(minutes, news):
-    while True:
-        with lock:
-            check_mlb()
-            if news:
-                check_news()
-        time.sleep(minutes * 60)
-
-
-def file_watcher():
+def background(poll_minutes, news):
+    next_feed_check = 0
     while True:
         with lock:
             check_file()
-        time.sleep(3)
+            if time.time() >= next_feed_check:
+                run_checks(news)
+                next_feed_check = time.time() + poll_minutes * 60
+        time.sleep(FILE_CHECK_SECONDS)
 
 
 # ---------- web server ----------
@@ -295,10 +261,12 @@ def snapshot():
     players = sorted(load(), key=bigness)
     for p in players:
         p["big"] = bool(is_big(p))
-        p["aav_m"] = round(aav(p), 2) if aav(p) else None
+        p["aav_m"] = round(aav(p), 2) or None
+    errors = [f"{k.upper()}: {v}" for k, v in state["errors"].items() if v]
     return {"players": players, "events": state["events"][-100:],
-            "last_check": state["last_check"], "last_error": state["last_error"],
-            "last_news_check": state["last_news_check"]}
+            "last_check": state["checked"]["mlb"],
+            "last_news_check": state["checked"]["news"],
+            "last_error": "; ".join(errors) or None}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -320,39 +288,41 @@ class Handler(BaseHTTPRequestHandler):
             self._send(b"not found", "text/plain", 404)
 
     def do_POST(self):
-        if self.path == "/api/refresh":
-            with lock:
-                check_mlb()
-                if self.server.news:
-                    check_news()
-            self._send(b'{"ok":true}', "application/json")
-        else:
-            self._send(b"not found", "text/plain", 404)
+        if self.path != "/api/refresh":
+            return self._send(b"not found", "text/plain", 404)
+        with lock:
+            run_checks(self.server.news)
+        self._send(b'{"ok":true}', "application/json")
 
     def log_message(self, *args):
         pass  # keep the console quiet
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser(description="Live MLB free agency dashboard")
     ap.add_argument("--port", type=int, default=8000)
-    ap.add_argument("--poll", type=float, default=5, help="minutes between checks")
-    ap.add_argument("--no-news", action="store_true",
-                    help="official MLB signings only; skip reported deals")
-    a = ap.parse_args()
+    ap.add_argument("--poll", type=float, default=5, help="minutes between feed checks")
+    ap.add_argument("--no-news", action="store_true", help="official MLB signings only")
+    ap.add_argument("--no-browser", action="store_true", help="don't open a browser tab")
+    a = ap.parse_args(argv)
 
     load_events()
     check_file()
     news = not a.no_news
-    threading.Thread(target=poller, args=(a.poll, news), daemon=True).start()
-    threading.Thread(target=file_watcher, daemon=True).start()
+    threading.Thread(target=background, args=(a.poll, news), daemon=True).start()
 
-    what = "MLB transactions + reported deals" if news else "MLB transactions"
-    print(f"Live dashboard: http://localhost:{a.port}   (checking {what} every {a.poll:g} min)")
-    print("Press Ctrl+C to stop.")
     server = ThreadingHTTPServer(("127.0.0.1", a.port), Handler)
     server.news = news
-    server.serve_forever()
+    url = f"http://localhost:{a.port}"
+    what = "MLB transactions + reported deals" if news else "MLB transactions"
+    print(f"Live dashboard: {url}   (checking {what} every {a.poll:g} min)")
+    print("Press Ctrl+C to stop.")
+    if not a.no_browser:
+        webbrowser.open(url)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nStopped.")
 
 
 if __name__ == "__main__":

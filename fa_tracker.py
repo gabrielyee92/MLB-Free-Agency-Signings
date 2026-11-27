@@ -9,6 +9,7 @@ $100M+ total or $20M+ per year.
 
 Usage examples:
   python fa_tracker.py                                  # show the board
+  python fa_tracker.py live                             # live dashboard in your browser
   python fa_tracker.py add "Michael King" --pos SP --old-team SD --big
   python fa_tracker.py sign "Michael King" --team NYY --years 5 --total 130
   python fa_tracker.py unsign "Michael King"            # undo a signing
@@ -87,56 +88,40 @@ def money(m):
     return f"${m:,.1f}M".replace(".0M", "M") if m else "-"
 
 
-def print_signings(players, big_only, top=None):
-    signed = [p for p in players if p.get("signed")]
-    if big_only:
-        signed = [p for p in signed if is_big(p)]
-    signed.sort(key=bigness)
-    if top:
-        signed = signed[:top]
+SIGNED_COLS = [("Player", 22, "name"), ("Pos", 5, "pos"), ("From", 6, "old_team"),
+               ("To", 6, "new_team"), ("Yrs", -4, lambda p: p.get("years") or "-"),
+               ("Total", -11, lambda p: money(p.get("total_m"))),
+               ("AAV", -10, lambda p: money(aav(p))),
+               ("  Date", 13, lambda p: "  " + (p.get("signed_date") or "")),
+               ("Notes", 0, "notes")]
+AVAIL_COLS = [("Rank", 6, lambda p: p.get("rank") or "-"), ("Player", 22, "name"),
+              ("Pos", 5, "pos"), ("2026 Team", 10, "old_team"), ("Notes", 0, "notes")]
 
-    print(f"\n=== SIGNINGS ({len(signed)}) " + "=" * 50)
-    if not signed:
-        print("  (none yet)")
+
+def print_section(title, rows, cols, empty):
+    print(f"\n=== {title} ({len(rows)}) " + "=" * (60 - len(title)))
+    if not rows:
+        print(f"  {empty}")
         return
-    print(f"  {'':3}{'Player':<22}{'Pos':<5}{'From':<6}{'To':<6}"
-          f"{'Yrs':>4}{'Total':>11}{'AAV':>10}  {'Date':<11}Notes")
-    for p in signed:
-        star = "★" if is_big(p) else " "
-        print(f"  {star}  {p['name']:<22}{p.get('pos',''):<5}"
-              f"{p.get('old_team',''):<6}{p.get('new_team',''):<6}"
-              f"{p.get('years') or '-':>4}{money(p.get('total_m')):>11}"
-              f"{money(aav(p)):>10}  {p.get('signed_date') or '':<11}"
-              f"{p.get('notes','')}")
-
-
-def print_available(players, big_only, top=None):
-    left = [p for p in players if not p.get("signed")]
-    if big_only:
-        left = [p for p in left if is_big(p)]
-    left.sort(key=bigness)
-    if top:
-        left = left[:top]
-
-    print(f"\n=== STILL AVAILABLE ({len(left)}) " + "=" * 43)
-    if not left:
-        print("  (everyone has signed!)")
-        return
-    print(f"  {'':3}{'Rank':<6}{'Player':<22}{'Pos':<5}{'2026 Team':<10}Notes")
-    for p in left:
-        star = "★" if is_big(p) else " "
-        rank = p.get("rank") or "-"
-        print(f"  {star}  {str(rank):<6}{p['name']:<22}{p.get('pos',''):<5}"
-              f"{p.get('old_team',''):<10}{p.get('notes','')}")
+    fmt = lambda v, w: f"{str(v):>{-w}}" if w < 0 else f"{str(v):<{w}}"
+    print("     " + "".join(fmt(h, w) for h, w, _ in cols))
+    for p in rows:
+        cells = (get(p) if callable(get) else p.get(get) or "" for _, _, get in cols)
+        print(f"  {'★' if is_big(p) else ' '}  "
+              + "".join(fmt(v, w) for v, (_, w, _) in zip(cells, cols)))
 
 
 def show(players, big_only=False, top=None):
-    total = len(players)
+    def pick(signed):
+        rows = sorted((p for p in players if bool(p.get("signed")) == signed
+                       and (is_big(p) or not big_only)), key=bigness)
+        return rows[:top] if top else rows
+
     done = sum(1 for p in players if p.get("signed"))
-    print(f"\nMLB FREE AGENCY TRACKER  -  {done}/{total} signed   "
+    print(f"\nMLB FREE AGENCY TRACKER  -  {done}/{len(players)} signed   "
           f"(★ = big name: flagged, ${BIG_TOTAL_M}M+ total, or ${BIG_AAV_M}M+ AAV)")
-    print_signings(players, big_only, top)
-    print_available(players, big_only, top)
+    print_section("SIGNINGS", pick(True), SIGNED_COLS, "(none yet)")
+    print_section("STILL AVAILABLE", pick(False), AVAIL_COLS, "(everyone has signed!)")
     print()
 
 
@@ -170,6 +155,9 @@ def cmd_sign(players, a):
 def cmd_unsign(players, a):
     p = find(players, a.name)
     p.update(signed=False, new_team="", years=None, total_m=None, signed_date=None)
+    # drop notes that only describe the deal
+    p["notes"] = "; ".join(n for n in p.get("notes", "").split("; ")
+                           if n not in ("", "Minor league deal", "Reported, not yet official"))
     save(players)
     print(f"{p['name']} is back on the market.")
 
@@ -215,7 +203,15 @@ def main():
     for c in ("unsign", "big", "remove"):
         sub.add_parser(c).add_argument("name")
 
-    a = ap.parse_args()
+    sub.add_parser("live", add_help=False,
+                   help="start the live dashboard (same options as live_dashboard.py)")
+
+    a, extra = ap.parse_known_args()
+    if a.cmd == "live":
+        import live_dashboard
+        return live_dashboard.main(extra)
+    if extra:
+        ap.error("unrecognized arguments: " + " ".join(extra))
     players = load()
     {"add": cmd_add, "sign": cmd_sign, "unsign": cmd_unsign,
      "big": cmd_big, "remove": cmd_remove}.get(a.cmd, lambda *_: None)(players, a)
