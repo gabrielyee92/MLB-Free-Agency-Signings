@@ -1,7 +1,7 @@
 """Live MLB Free Agency Dashboard.
 
     python live_dashboard.py              opens http://localhost:8000
-    python live_dashboard.py --poll 2     check every 2 minutes (default 5)
+    python live_dashboard.py --poll 5     check every 5 minutes (default 1)
     python live_dashboard.py --no-news    official signings only
 
 Three ways a signing reaches the board, each with a pop-up:
@@ -16,6 +16,7 @@ import argparse
 import html
 import json
 import re
+import sys
 import threading
 import time
 import unicodedata
@@ -61,9 +62,15 @@ NUM_WORDS = {w: i for i, w in enumerate(
     "thirteen fourteen fifteen".split())}
 MINORS_RE = re.compile(r"minor[s -]league|minors contract", re.I)
 
-lock = threading.Lock()
-state = {"events": [], "seen_tx": [], "seen_news": [], "signed": None, "mtime": 0,
-         "checked": {"mlb": None, "news": None}, "errors": {"mlb": None, "news": None}}
+# Shared across code reloads. Streamlit Cloud re-imports this module after a
+# push without restarting the process; keeping the lock and state on `sys`
+# means old and new code never run two checkers that overwrite each other.
+shared = sys.__dict__.setdefault("_fa_tracker_shared", {})
+lock = shared.setdefault("lock", threading.Lock())
+state = shared.setdefault("state", {
+    "events": [], "seen_tx": [], "seen_news": [], "signed": None, "mtime": 0,
+    "checked": {"mlb": None, "news": None}, "errors": {"mlb": None, "news": None}})
+NEWS_CATCH_UP_PAGES = 4   # on startup, read ~2 days of news in case we slept
 
 
 # ---------- helpers ----------
@@ -144,11 +151,15 @@ def record_signing(p, source, team, signed_date=None, years=None, total=None,
     add_event(p, source, link)
 
 
-def commit(players):
-    """Save the board and remember it, so the file watcher doesn't re-announce it."""
-    save(players)
+def commit(players, changed):
+    """Save only the players we changed on top of the latest file (so nothing
+    written in the meantime is lost), and remember the result so the file
+    watcher doesn't announce it twice."""
+    mine = {p["name"]: p for p in players if p["name"] in changed}
+    fresh = [mine.get(p["name"], p) for p in load()]
+    save(fresh)
     state["mtime"] = DATA_FILE.stat().st_mtime
-    state["signed"] = {p["name"] for p in players if p.get("signed")}
+    state["signed"] = {p["name"] for p in fresh if p.get("signed")}
 
 
 # ---------- sources ----------
@@ -176,7 +187,7 @@ def check_mlb():
     txs = json.loads(fetch(MLB_FEED.format(today=date.today())))["transactions"]
     players = load()
     by_name = {norm(p["name"]): p for p in players}
-    seen, changed = set(state["seen_tx"]), False
+    seen, changed = set(state["seen_tx"]), set()
     for tx in txs:
         if tx.get("id") in seen or tx.get("typeCode") != "SFA":
             continue
@@ -188,24 +199,27 @@ def check_mlb():
         if REPORTED in p.get("notes", ""):        # reported deal is now official
             drop_note(p, REPORTED)
             p["new_team"] = team or p["new_team"]
-            changed = True
+            changed.add(p["name"])
         elif not p.get("signed"):
             record_signing(p, "MLB official", team, tx.get("date"),
                            minors=bool(MINORS_RE.search(tx.get("description", ""))))
-            changed = True
+            changed.add(p["name"])
     if changed:
-        commit(players)
+        commit(players, changed)
 
 
-def check_news():
-    root = ET.fromstring(fetch(NEWS_FEED))
+def check_news(pages=1):
+    items = []
+    for page in range(1, pages + 1):
+        url = NEWS_FEED if page == 1 else f"{NEWS_FEED}?paged={page}"
+        items += list(ET.fromstring(fetch(url)).iter("item"))
     players = load()
     unsigned = {}
     for p in players:
         if not p.get("signed"):
             unsigned.setdefault(norm(p["name"]), []).append(p)
-    seen, changed = set(state["seen_news"]), False
-    for item in root.iter("item"):
+    seen, changed = set(state["seen_news"]), set()
+    for item in reversed(items):  # oldest first, like they happened
         guid = item.findtext("guid") or item.findtext("link")
         if guid in seen:
             continue
@@ -228,13 +242,16 @@ def check_news():
                            minors=bool(MINORS_RE.search(title + " " + desc)),
                            link=item.findtext("link"))
             unsigned.pop(norm(p["name"]), None)
-        changed = True
+            changed.add(p["name"])
     if changed:
-        commit(players)
+        commit(players, changed)
 
 
-def run_checks(news):
-    for name, check in [("mlb", check_mlb)] + ([("news", check_news)] if news else []):
+def run_checks(news, catch_up=False):
+    checks = [("mlb", check_mlb)]
+    if news:
+        checks.append(("news", lambda: check_news(NEWS_CATCH_UP_PAGES if catch_up else 1)))
+    for name, check in checks:
         try:
             check()
             state["checked"][name] = datetime.now().isoformat(timespec="seconds")
@@ -244,18 +261,45 @@ def run_checks(news):
     save_events()
 
 
-def background(poll_minutes, news):
-    next_feed_check = 0
-    while True:
+def background(poll_minutes, news, stop=None):
+    """Check the data file every few seconds and the feeds every poll_minutes.
+    Exits when `stop` is set (a newer checker has taken over)."""
+    stop = stop or threading.Event()
+    next_feed_check, first = 0, True
+    while not stop.is_set():
         try:
             with lock:
+                if stop.is_set():
+                    break
                 check_file()
                 if time.time() >= next_feed_check:
                     next_feed_check = time.time() + poll_minutes * 60
-                    run_checks(news)
+                    run_checks(news, catch_up=first)
+                    first = False
         except Exception as e:  # never let one bad check stop the loop
             state["errors"]["mlb"] = f"Checker: {type(e).__name__}: {e}"
-        time.sleep(FILE_CHECK_SECONDS)
+        stop.wait(FILE_CHECK_SECONDS)
+
+
+def ensure_checker(poll_minutes, news):
+    """Start the one background checker for this process, replacing an older
+    one left behind by a code reload. Safe to call on every page load."""
+    me = sys.modules[__name__]
+    with shared.setdefault("start_lock", threading.Lock()):
+        t = shared.get("thread")
+        if t and t.is_alive() and shared.get("module") is me:
+            return
+        if t:
+            shared["stop"].set()        # old code's checker: finish and exit
+        if not shared.get("loaded"):
+            load_events()
+            check_file()
+            shared["loaded"] = True
+        stop = threading.Event()
+        t = threading.Thread(target=background, args=(poll_minutes, news, stop),
+                             daemon=True, name="fa-checker")
+        shared.update(thread=t, stop=stop, module=me)
+        t.start()
 
 
 # ---------- web server ----------
@@ -304,15 +348,13 @@ class Handler(BaseHTTPRequestHandler):
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Live MLB free agency dashboard")
     ap.add_argument("--port", type=int, default=8000)
-    ap.add_argument("--poll", type=float, default=5, help="minutes between feed checks")
+    ap.add_argument("--poll", type=float, default=1, help="minutes between feed checks")
     ap.add_argument("--no-news", action="store_true", help="official MLB signings only")
     ap.add_argument("--no-browser", action="store_true", help="don't open a browser tab")
     a = ap.parse_args(argv)
 
-    load_events()
-    check_file()
     news = not a.no_news
-    threading.Thread(target=background, args=(a.poll, news), daemon=True).start()
+    ensure_checker(a.poll, news)
 
     server = ThreadingHTTPServer(("127.0.0.1", a.port), Handler)
     server.news = news

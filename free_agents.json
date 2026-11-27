@@ -330,12 +330,12 @@
   "old_team": "NYY",
   "rank": 20,
   "big_name": true,
-  "signed": false,
-  "new_team": "",
+  "signed": true,
+  "new_team": "TOR",
   "years": null,
   "total_m": null,
-  "signed_date": null,
-  "notes": ""
+  "signed_date": "2026-11-27",
+  "notes": "Reported, not yet official"
  },
  {
   "name": "Brandon Lowe",
@@ -2293,12 +2293,12 @@
   "old_team": "",
   "rank": null,
   "big_name": false,
-  "signed": false,
-  "new_team": "",
+  "signed": true,
+  "new_team": "ARI",
   "years": null,
   "total_m": null,
-  "signed_date": null,
-  "notes": ""
+  "signed_date": "2026-11-27",
+  "notes": "Reported, not yet official"
  },
  {
   "name": "Adrian Morejon",
@@ -3177,12 +3177,12 @@
   "old_team": "",
   "rank": null,
   "big_name": false,
-  "signed": false,
-  "new_team": "",
+  "signed": true,
+  "new_team": "TEX",
   "years": null,
   "total_m": null,
-  "signed_date": null,
-  "notes": ""
+  "signed_date": "2026-11-27",
+  "notes": "Minor league deal; Reported, not yet official"
  },
  {
   "name": "Drew Pomeranz",

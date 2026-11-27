@@ -12,7 +12,10 @@ Deploy on Streamlit Community Cloud with **main file `fa_tracker.py`** (or `stre
 streamlit run fa_tracker.py
 ```
 
-Same live checks and pop-ups as the local dashboard. Note: Streamlit Cloud doesn't keep file changes, so when the app restarts, signings picked up from the feeds are lost until the next check (official MLB signings come right back; reported-only deals return once MLB makes them official). To make a change permanent, edit `free_agents.json` and push it.
+Two tabs:
+
+- **Free Agency**: the live board. Feeds are checked every minute; after the app wakes from sleep it reads back ~2 days of news so nothing posted while it slept is missed.
+- **Team Rosters**: pick any team to see its current 40-man roster with last season's stats (MLB Stats API), its free agent additions (highlighted, with contract terms) and the free agents it lost or hasn't re-signed. Signings not on the 40-man yet are included with their stats. MLB's data has no salaries, so contracts are shown for this offseason's free agent deals only. Note: Streamlit Cloud doesn't keep file changes, so when the app restarts, signings picked up from the feeds are lost until the next check (official MLB signings come right back; reported-only deals return once MLB makes them official). To make a change permanent, edit `free_agents.json` and push it.
 
 ## Live dashboard (local)
 
@@ -29,7 +32,7 @@ It opens http://localhost:8000 in your browser.
 - Pop-up for every new signing. Big names get a gold banner and a chime.
 - Search, position filter, big-names-only and hide-minor-league-deals toggles.
 
-Options: `--poll 2` (check every 2 minutes), `--no-news` (official signings only), `--port 8080`.
+Options: `--poll 5` (check every 5 minutes; default is every minute), `--no-news` (official signings only), `--port 8080`.
 
 ## Command line
 
