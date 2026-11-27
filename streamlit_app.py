@@ -24,8 +24,12 @@ SOURCE = {"MLB official": "Official (MLB)", "Reported": "Reported (MLB Trade Rum
 
 
 @st.cache_resource
-def start_checker():
-    """One background checker per server, shared by every visitor."""
+def start_checker(state_id):
+    """One background checker per server, shared by every visitor.
+
+    Keyed on the id of live_dashboard's state, so when Streamlit Cloud
+    hot-reloads the code after a push, a fresh checker starts for the
+    fresh module instead of the old one updating a copy nobody reads."""
     ld.load_events()
     ld.check_file()
     t = threading.Thread(target=ld.background, args=(POLL_MINUTES, True), daemon=True)
@@ -107,7 +111,7 @@ def big_banner(events):
 
 def render():
     st.set_page_config(page_title="MLB Free Agency Tracker", page_icon="⚾", layout="wide")
-    start_checker()
+    start_checker(id(ld.state))
 
     with st.sidebar:
         st.header("Filters")

@@ -247,11 +247,14 @@ def run_checks(news):
 def background(poll_minutes, news):
     next_feed_check = 0
     while True:
-        with lock:
-            check_file()
-            if time.time() >= next_feed_check:
-                run_checks(news)
-                next_feed_check = time.time() + poll_minutes * 60
+        try:
+            with lock:
+                check_file()
+                if time.time() >= next_feed_check:
+                    next_feed_check = time.time() + poll_minutes * 60
+                    run_checks(news)
+        except Exception as e:  # never let one bad check stop the loop
+            state["errors"]["mlb"] = f"Checker: {type(e).__name__}: {e}"
         time.sleep(FILE_CHECK_SECONDS)
 
 
