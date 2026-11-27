@@ -4,7 +4,17 @@ Tracks the 2026-27 MLB free agent class: who has signed, who is still available,
 
 Pure Python standard library: nothing to install.
 
-## Live dashboard
+## Streamlit
+
+Deploy on Streamlit Community Cloud with **main file `fa_tracker.py`** (or `streamlit_app.py`). Locally:
+
+```
+streamlit run fa_tracker.py
+```
+
+Same live checks and pop-ups as the local dashboard. Note: Streamlit Cloud doesn't keep file changes, so when the app restarts, signings picked up from the feeds are lost until the next check (official MLB signings come right back; reported-only deals return once MLB makes them official). To make a change permanent, edit `free_agents.json` and push it.
+
+## Live dashboard (local)
 
 Double-click **Start Dashboard.bat**, or run:
 

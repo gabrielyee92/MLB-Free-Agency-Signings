@@ -219,10 +219,23 @@ def main():
         show(players, getattr(a, "big_only", False), getattr(a, "top", None))
 
 
-if __name__ == "__main__":
-    # Windows consoles sometimes can't print ★ by default
+def running_in_streamlit():
     try:
-        sys.stdout.reconfigure(encoding="utf-8")
-    except AttributeError:
-        pass
-    main()
+        from streamlit import runtime
+        return runtime.exists()
+    except ImportError:
+        return False
+
+
+if __name__ == "__main__":
+    if running_in_streamlit():
+        # `streamlit run fa_tracker.py` (e.g. Streamlit Community Cloud)
+        import streamlit_app
+        streamlit_app.render()
+    else:
+        # Windows consoles sometimes can't print ★ by default
+        try:
+            sys.stdout.reconfigure(encoding="utf-8")
+        except AttributeError:
+            pass
+        main()
