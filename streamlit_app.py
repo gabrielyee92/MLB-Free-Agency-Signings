@@ -519,9 +519,9 @@ def trades_tab():
             st.markdown("\n".join(f"- [{e['name']}]({e['link']}) · {local(e['time']):%b %d %I:%M %p} PT"
                                   for e in reversed(reported[-8:])))
 
-        periods = ["All"] + sorted({t["period"] for t in everything}, reverse=True)
+        periods = ["All"] + sorted({t.get("period", "Other") for t in everything}, reverse=True)
         period = st.radio("Show", periods, horizontal=True, key="trade_period")
-        all_trades = [t for t in everything if period == "All" or t["period"] == period]
+        all_trades = [t for t in everything if period == "All" or t.get("period", "Other") == period]
         st.caption(f"{len(all_trades)} official trades from MLB's transaction feed (checked every "
                    "minute; reported trades from MLB Trade Rumors every 30 seconds). Fit and "
                    "impact notes compare each player's 2026 stats with the players at his "

@@ -290,6 +290,10 @@ if __name__ == "__main__":
         stamp = max(f.stat().st_mtime for f in here.glob("*.py"))
         shared = sys.__dict__.setdefault("_fa_tracker_shared", {})
         if shared.get("code_stamp") != stamp:
+            if shared.get("code_stamp") is not None:
+                # cached results were made by the old code and may not match the new
+                import streamlit as st
+                st.cache_data.clear()
             for name in ("fa_tracker", "live_dashboard", "contracts", "rosters",
                          "news_contracts", "payroll_history", "trades", "streamlit_app"):
                 if name in sys.modules:
