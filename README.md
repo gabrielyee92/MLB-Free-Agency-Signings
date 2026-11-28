@@ -56,3 +56,24 @@ A player is a **★ big name** if they are flagged (MLB Trade Rumors' top 25 sta
 ## Data
 
 `free_agents.json` holds every player. The starting list came from MLB.com's 2026-27 free agent list, MLB Trade Rumors' Top 50, and the CBS Sports tracker (as of Nov. 26, 2026).
+
+## Salaries and payrolls
+
+MLB's free data has no salaries, so they live in **`salaries.csv`** (amounts in $ millions):
+
+| column | meaning |
+|---|---|
+| player, team | name as MLB spells it; team abbreviation (TOR, NYY, ...) |
+| status | Guaranteed, Arbitration, Pre-arb, ... (Pre-arb with no salary = league minimum) |
+| start_year, years | first season and length of the contract |
+| total_m, aav_m | total value and average per year (give either; the other is computed) |
+| 2027 ... 2032 | exact salary for a year (optional; otherwise AAV is used for each covered year) |
+
+Add or update one player from the command line:
+
+```
+python fa_tracker.py salary "Vladimir Guerrero Jr." --team TOR --start 2026 --years 14 --total 500
+python fa_tracker.py salary "Some Player" --team SEA --status Arbitration --by-year 2027=4.5
+```
+
+This offseason's free agent signings with terms are included automatically. The app shows each player's 2027 salary, AAV, total and years on **Team Rosters**, a payroll summary per team, and a **Payrolls** tab ranking all 30 teams for 2027-2032. Push `salaries.csv` to update the website.

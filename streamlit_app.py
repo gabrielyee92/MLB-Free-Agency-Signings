@@ -16,6 +16,7 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import streamlit as st
 
+import contracts
 import live_dashboard as ld
 import rosters
 from fa_tracker import BIG_AAV_M, BIG_TOTAL_M
@@ -201,37 +202,44 @@ def stats_of(r, group, minors):
     return (r.get("milb", {}) if minors else r).get(group) or {}
 
 
-def player_cols(r, contract, minors, hand):
+def player_cols(r, c, minors, hand):
     cols = {"Player": r["name"], "Pos": r["pos"], "Age": r["age"], hand[0]: r[hand[1]]}
     if minors:
         cols |= {"Level": r.get("milb", {}).get("level") or "–",
                  "Affiliate": r.get("milb", {}).get("team") or ""}
-    return cols | {"Status": r["status"], "Contract": contract}
+    y = contracts.PAYROLL_YEAR
+    pay = contracts.salary(c, y)
+    est = bool(pay) and y not in c["by_year"] and not c["years"]   # pre-arb at league min
+    return cols | {"Status": r["status"],
+                   f"{y} salary": (money(pay) + (" (min, est.)" if est else "")) if pay else "–",
+                   "AAV": money(c["aav_m"]) if c else "–",
+                   "Total": money(c["total_m"]) if c else "–",
+                   "Years": contracts.years_text(c)}
 
 
-def hitter_row(r, contract, minors):
+def hitter_row(r, c, minors):
     h = stats_of(r, "hitting", minors)
-    return player_cols(r, contract, minors, ("B", "bats")) | {
+    return player_cols(r, c, minors, ("B", "bats")) | {
         "G": h.get("gamesPlayed"), "PA": h.get("plateAppearances"),
         "AVG": h.get("avg"), "OBP": h.get("obp"), "SLG": h.get("slg"),
         "OPS": h.get("ops"), "HR": h.get("homeRuns"), "RBI": h.get("rbi"),
         "SB": h.get("stolenBases")}
 
 
-def pitcher_row(r, contract, minors):
+def pitcher_row(r, c, minors):
     p = stats_of(r, "pitching", minors)
-    return player_cols(r, contract, minors, ("T", "throws")) | {
+    return player_cols(r, c, minors, ("T", "throws")) | {
         "G": p.get("gamesPlayed"), "GS": p.get("gamesStarted"),
         "IP": p.get("inningsPitched"), "W": p.get("wins"), "L": p.get("losses"),
         "ERA": p.get("era"), "WHIP": p.get("whip"), "SO": p.get("strikeOuts"),
         "BB": p.get("baseOnBalls"), "SV": p.get("saves")}
 
 
-def roster_table(rows, pitchers, minors, new_names, contracts):
+def roster_table(rows, pitchers, minors, new_names, deals):
     make, group, key = ((pitcher_row, "pitching", "inningsPitched") if pitchers
                         else (hitter_row, "hitting", "plateAppearances"))
     rows = sorted(rows, key=lambda r: -(num(stats_of(r, group, minors).get(key)) or -1))
-    df = pd.DataFrame([make(r, contracts.get(ld.norm(r["name"]), ""), minors) for r in rows])
+    df = pd.DataFrame([make(r, deals.get(ld.norm(r["name"])), minors) for r in rows])
     if df.empty:
         return df
     df = df.astype(object).where(df.notna(), "")   # Streamlit draws missing values as "None"
@@ -241,7 +249,7 @@ def roster_table(rows, pitchers, minors, new_names, contracts):
     return out.format({c: whole for c in counts if c in df})
 
 
-def roster_section(title, note, rows, minors, new_names, contracts):
+def roster_section(title, note, rows, minors, new_names, deals):
     with st.container(border=True):
         st.subheader(title)
         st.caption(note)
@@ -249,9 +257,68 @@ def roster_section(title, note, rows, minors, new_names, contracts):
             part = [r for r in rows if (rosters.is_pitcher(r) if pitchers else rosters.is_hitter(r))]
             st.markdown(f"**{label} ({len(part)})**")
             if part:
-                st.dataframe(roster_table(part, pitchers, minors, new_names, contracts),
+                st.dataframe(roster_table(part, pitchers, minors, new_names, deals),
                              hide_index=True, width="stretch",
                              height=min(38 + 35 * len(part), 600))
+
+
+PAYROLL_NOTE = (
+    "Payroll = salaries owed to players on the 40-man roster (plus signings not on it yet). "
+    "Committed counts only salaries entered in salaries.csv and tracked free agent signings. "
+    f"The estimate also counts every player without a salary at the league minimum "
+    f"(${contracts.LEAGUE_MIN_M}M, the 2026 figure; the 2027 minimum depends on the next "
+    "labor deal).")
+
+
+def payroll_block(team, rows, deals):
+    pay = contracts.payroll([r["name"] for r in rows], deals)
+    y = contracts.PAYROLL_YEAR
+    with st.container(border=True):
+        st.subheader(f"💰 {team['name']} payroll")
+        c1, c2, c3 = st.columns(3)
+        c1.metric(f"{y} committed", money(pay["by_year"][y]))
+        c2.metric(f"Players with a {y} salary", f"{pay['known']} / {pay['players']}")
+        c3.metric(f"{y} estimate (blanks at league min)", money(pay["estimate"]))
+        st.dataframe(pd.DataFrame([{str(yr): money(v) for yr, v in pay["by_year"].items()}]),
+                     hide_index=True, width="stretch")
+        st.caption(PAYROLL_NOTE)
+
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def cached_roster_names(team_id):
+    return rosters.roster_names(team_id)
+
+
+def payrolls_tab():
+    teams = cached_teams()
+    deals = contracts.load_contracts()
+    fa = ld.load()
+    y = contracts.PAYROLL_YEAR
+    rows = []
+    with st.spinner("Loading all 30 rosters…"):
+        for t in teams:
+            names = list(cached_roster_names(t["id"]))
+            on = {ld.norm(n) for n in names}
+            names += [p["name"] for p in fa if p.get("signed") and p.get("new_team") == t["abbr"]
+                      and "minor league" not in (p.get("notes") or "").lower()
+                      and ld.norm(p["name"]) not in on]
+            pay = contracts.payroll(names, deals)
+            rows.append({"Team": t["name"], f"{y} committed": pay["by_year"][y],
+                         "Salaries entered": f"{pay['known']} / {pay['players']}",
+                         f"{y} estimate": pay["estimate"],
+                         **{f"{yr} committed": pay["by_year"][yr] for yr in contracts.YEARS[1:]}})
+    df = pd.DataFrame(rows).sort_values(f"{y} committed", ascending=False)
+    money_cols = [c for c in df if c not in ("Team", "Salaries entered")]
+    st.subheader(f"💰 Team payrolls, {contracts.YEARS[0]}–{contracts.YEARS[-1]}")
+    st.caption(PAYROLL_NOTE)
+    entered = sum(1 for c in deals.values() if c["source"] == "salaries.csv")
+    if entered < 300:
+        st.info(f"Only {entered} players have salaries in salaries.csv so far (plus "
+                f"{len(deals) - entered} tracked free agent signings), so most payrolls are "
+                "incomplete. Add salaries with `python fa_tracker.py salary ...` or by "
+                "filling in salaries.csv.")
+    st.dataframe(df.style.format({c: money for c in money_cols}), hide_index=True,
+                 width="stretch", height=38 + 35 * len(df))
 
 
 def rosters_tab():
@@ -268,8 +335,8 @@ def rosters_tab():
                     and "minor league" not in (p["notes"] or "").lower()]
         outgoing = [p for p in fa if p["old_team"] == team["abbr"]
                     and p["new_team"] != team["abbr"]]
-        contracts = {ld.norm(p["name"]): deal(p) for p in incoming}
-        new_names = set(contracts)
+        new_names = {ld.norm(p["name"]) for p in incoming}
+        deals = contracts.load_contracts()
 
         data = cached_team_roster(team["id"], tuple(sorted(p["name"] for p in incoming)))
         rows = list(data["rows"])
@@ -288,6 +355,8 @@ def rosters_tab():
         c3.metric("Free agents added", len(incoming))
         c4.metric("Free agents lost / unsigned", len(outgoing))
 
+        payroll_block(team, rows, deals)
+
         with st.expander(f"{team['name']} free agency moves", expanded=bool(incoming or outgoing)):
             a, b = st.columns(2)
             with a:
@@ -302,8 +371,8 @@ def rosters_tab():
                                             "Deal": deal(p) if p["signed"] else ""} for p in outgoing]),
                              hide_index=True, width="stretch")
 
-        st.caption("Green rows = signed this offseason. Contracts are shown for this "
-                   "offseason's free agent signings only; MLB's data doesn't include salaries.")
+        st.caption("Green rows = signed this offseason. Salaries come from salaries.csv and "
+                   "this offseason's tracked signings; – = no salary entered yet.")
         if data["in_season"]:
             mlb_note = f"Today's 26-man active roster plus the injured list · {season} MLB stats"
         else:
@@ -312,11 +381,11 @@ def rosters_tab():
                         f"(rosters expand to 28 in September) and the injured list then, minus "
                         f"players who have left, plus newcomers who played mostly in the majors · "
                         f"{season} MLB stats")
-        roster_section(f"🏟️ MLB roster ({len(mlb)})", mlb_note, mlb, False, new_names, contracts)
+        roster_section(f"🏟️ MLB roster ({len(mlb)})", mlb_note, mlb, False, new_names, deals)
         roster_section(f"🌱 Minor leagues — rest of the 40-man ({len(minors)})",
                        f"On the 40-man roster but playing in the minors · {season} minor-league "
                        f"stats, all levels combined · Level = highest level reached",
-                       minors, True, new_names, contracts)
+                       minors, True, new_names, deals)
 
     view()
 
@@ -342,11 +411,13 @@ def render():
                    f"or ${BIG_AAV_M}M+ per year.")
 
     st.title("⚾ MLB Free Agency Tracker")
-    fa_tab, team_tab = st.tabs(["Free Agency", "Team Rosters"])
+    fa_tab, team_tab, pay_tab = st.tabs(["Free Agency", "Team Rosters", "Payrolls"])
     with fa_tab:
         free_agency_tab(q, pos, big_only, hide_minors)
     with team_tab:
         rosters_tab()
+    with pay_tab:
+        payrolls_tab()
 
 
 if __name__ == "__main__":

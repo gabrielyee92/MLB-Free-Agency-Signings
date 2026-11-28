@@ -170,3 +170,8 @@ def is_pitcher(r):
 
 def is_hitter(r):
     return not is_pitcher(r) or r["pos"] == "TWP"
+
+
+def roster_names(team_id):
+    """Names on the team's current 40-man roster (no stats; fast)."""
+    return [r["person"]["fullName"] for r in get(f"teams/{team_id}/roster?rosterType=40Man")["roster"]]

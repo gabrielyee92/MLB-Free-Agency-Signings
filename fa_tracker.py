@@ -17,6 +17,8 @@ Usage examples:
   python fa_tracker.py remove "Brandon Lowe"
   python fa_tracker.py show --big-only                  # only the headliners
   python fa_tracker.py show --top 25                    # top 25 of each section
+  python fa_tracker.py salary "Vladimir Guerrero Jr." --team TOR --start 2026 --years 14 --total 500
+  python fa_tracker.py salary "Some Player" --team SEA --status Arbitration --by-year 2027=4.5
 
 Ranks come from MLB Trade Rumors' Top 50; ranks 1-25 start flagged as big names.
 """
@@ -179,6 +181,32 @@ def cmd_remove(players, a):
     print(f"Removed {p['name']}.")
 
 
+def cmd_salary(players, a):
+    """Add or update a player's contract in salaries.csv."""
+    import contracts
+    rows = contracts.read_file()
+    key = a.name.lower().strip()
+    row = next((r for r in rows if r["player"].lower().strip() == key), None)
+    if row is None:
+        row = {"player": a.name}
+        rows.append(row)
+    for field, value in (("team", a.team), ("status", a.status), ("start_year", a.start),
+                         ("years", a.years), ("total_m", a.total), ("aav_m", a.aav),
+                         ("notes", a.notes)):
+        if value is not None:
+            row[field] = value
+    for pair in a.by_year or []:
+        year, _, amount = pair.partition("=")
+        if year.strip() not in [str(y) for y in contracts.YEARS] or not amount:
+            sys.exit(f"--by-year needs YEAR=AMOUNT with a year from {contracts.YEARS[0]}-{contracts.YEARS[-1]}")
+        row[year.strip()] = amount.strip()
+    contracts.write_file(rows)
+    c = contracts.load_contracts()[contracts.norm(row["player"])]
+    print(f"{row['player']} ({c['team']}): {contracts.years_text(c) or '?'} yrs, "
+          f"total {money(c['total_m'])}, AAV {money(c['aav_m'])}, "
+          f"{contracts.PAYROLL_YEAR} salary {money(contracts.salary(c, contracts.PAYROLL_YEAR))}")
+
+
 def main():
     ap = argparse.ArgumentParser(description="Track MLB free agency signings.")
     sub = ap.add_subparsers(dest="cmd")
@@ -206,6 +234,18 @@ def main():
     for c in ("unsign", "big", "remove"):
         sub.add_parser(c).add_argument("name")
 
+    s = sub.add_parser("salary", help="add or update a player's salary/contract (salaries.csv)")
+    s.add_argument("name")
+    s.add_argument("--team", help="team abbreviation, e.g. TOR")
+    s.add_argument("--status", help="Guaranteed, Arbitration, Pre-arb, ...")
+    s.add_argument("--start", type=int, help="first season of the contract")
+    s.add_argument("--years", type=int)
+    s.add_argument("--total", type=float, help="total value in $ millions")
+    s.add_argument("--aav", type=float, help="average per year in $ millions")
+    s.add_argument("--by-year", nargs="*", metavar="YEAR=AMOUNT",
+                   help="exact salary for specific years, e.g. 2027=30 2028=32")
+    s.add_argument("--notes")
+
     sub.add_parser("live", add_help=False,
                    help="start the live dashboard (same options as live_dashboard.py)")
 
@@ -217,7 +257,8 @@ def main():
         ap.error("unrecognized arguments: " + " ".join(extra))
     players = load()
     {"add": cmd_add, "sign": cmd_sign, "unsign": cmd_unsign,
-     "big": cmd_big, "remove": cmd_remove}.get(a.cmd, lambda *_: None)(players, a)
+     "big": cmd_big, "remove": cmd_remove,
+     "salary": cmd_salary}.get(a.cmd, lambda *_: None)(players, a)
     if a.cmd in (None, "show"):
         show(players, getattr(a, "big_only", False), getattr(a, "top", None))
 
