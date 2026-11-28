@@ -77,3 +77,13 @@ python fa_tracker.py salary "Some Player" --team SEA --status Arbitration --by-y
 ```
 
 This offseason's free agent signings with terms are included automatically. The app shows each player's 2027 salary, AAV, total and years on **Team Rosters**, a payroll summary per team, and a **Payrolls** tab ranking all 30 teams for 2027-2032. Push `salaries.csv` to update the website.
+
+### Contracts from the news (automatic)
+
+The feed checker also reads MLB Trade Rumors stories for **contract extensions**, **arbitration deals** and other major-league signings, and records them in `salaries.csv` (marked `News:` in the notes column). Names are checked against MLB's player database, and the player's current team must match the headline. Rows you enter by hand are never overwritten. To read back through older news:
+
+```
+python fa_tracker.py contracts --pages 20     # ~15 stories per page, about half a day each
+```
+
+Payrolls follow each team's current 40-man roster, so traded players' salaries move with them automatically. Streamlit Cloud forgets file changes when it restarts; run the command above locally and push `salaries.csv` to keep what it found.

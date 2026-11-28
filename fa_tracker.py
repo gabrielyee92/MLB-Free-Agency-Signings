@@ -19,6 +19,7 @@ Usage examples:
   python fa_tracker.py show --top 25                    # top 25 of each section
   python fa_tracker.py salary "Vladimir Guerrero Jr." --team TOR --start 2026 --years 14 --total 500
   python fa_tracker.py salary "Some Player" --team SEA --status Arbitration --by-year 2027=4.5
+  python fa_tracker.py contracts --pages 20               # pull contracts from recent news
 
 Ranks come from MLB Trade Rumors' Top 50; ranks 1-25 start flagged as big names.
 """
@@ -246,10 +247,18 @@ def main():
                    help="exact salary for specific years, e.g. 2027=30 2028=32")
     s.add_argument("--notes")
 
+    s = sub.add_parser("contracts", help="read recent MLB Trade Rumors news into salaries.csv")
+    s.add_argument("--pages", type=int, default=20, help="pages of news (~half a day each)")
+
     sub.add_parser("live", add_help=False,
                    help="start the live dashboard (same options as live_dashboard.py)")
 
     a, extra = ap.parse_known_args()
+    if a.cmd == "contracts":
+        import news_contracts
+        found = news_contracts.backfill(a.pages)
+        print("\n".join(found) or "No new contracts found.")
+        return
     if a.cmd == "live":
         import live_dashboard
         return live_dashboard.main(extra)

@@ -2267,12 +2267,12 @@
   "old_team": "NPB",
   "rank": 36,
   "big_name": false,
-  "signed": false,
-  "new_team": "",
+  "signed": true,
+  "new_team": "CHC",
   "years": null,
   "total_m": null,
-  "signed_date": null,
-  "notes": "Posted by NPB team"
+  "signed_date": "2026-11-27",
+  "notes": "Posted by NPB team; Reported, not yet official"
  },
  {
   "name": "Kaima Taira",
@@ -2735,12 +2735,12 @@
   "old_team": "",
   "rank": null,
   "big_name": false,
-  "signed": false,
-  "new_team": "",
-  "years": null,
+  "signed": true,
+  "new_team": "CHC",
+  "years": 1,
   "total_m": null,
-  "signed_date": null,
-  "notes": ""
+  "signed_date": "2026-11-27",
+  "notes": "Reported, not yet official"
  },
  {
   "name": "Enyel De Los Santos",

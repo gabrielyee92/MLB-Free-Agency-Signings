@@ -320,6 +320,19 @@ def payrolls_tab():
     st.dataframe(df.style.format({c: money for c in money_cols}), hide_index=True,
                  width="stretch", height=38 + 35 * len(df))
 
+    news = [c for c in deals.values() if c["notes"].startswith("News")]
+    st.subheader(f"📰 Contracts picked up from the news ({len(news)})")
+    st.caption("Extensions, arbitration deals and other signings read automatically from "
+               "MLB Trade Rumors stories (checked every minute). Free agent deals are on the "
+               "Free Agency tab.")
+    if news:
+        st.dataframe(pd.DataFrame([{
+            "Player": c["player"], "Team": c["team"], "Type": c["status"],
+            "Years": contracts.years_text(c), "Total": money(c["total_m"]),
+            "AAV": money(c["aav_m"]), f"{y} salary": money(contracts.salary(c, y)),
+            "Headline": c["notes"].removeprefix("News: ")} for c in news]),
+            hide_index=True, width="stretch")
+
 
 def rosters_tab():
     @st.fragment(run_every=ROSTER_REFRESH)

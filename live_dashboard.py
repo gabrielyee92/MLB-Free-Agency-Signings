@@ -213,7 +213,9 @@ def check_news(pages=1):
     for page in range(1, pages + 1):
         url = NEWS_FEED if page == 1 else f"{NEWS_FEED}?paged={page}"
         items += list(ET.fromstring(fetch(url)).iter("item"))
+    import news_contracts                 # imported here: it imports this module
     players = load()
+    board = {norm(p["name"]) for p in players}
     unsigned = {}
     for p in players:
         if not p.get("signed"):
@@ -225,6 +227,16 @@ def check_news(pages=1):
             continue
         state["seen_news"].append(guid)
         title = html.unescape(item.findtext("title") or "")
+        # extensions, arbitration deals and other contracts -> salaries.csv
+        try:
+            recorded = news_contracts.handle(item, title, skip_names=board)
+        except Exception as e:  # one odd story shouldn't stop the feed check
+            recorded = None
+            state["errors"]["news"] = f"Contract parse ({title[:40]}): {type(e).__name__}: {e}"
+        if recorded:
+            state.setdefault("contract_news", []).append({
+                "time": datetime.now().isoformat(timespec="seconds"),
+                "text": recorded, "link": item.findtext("link")})
         team = find_team(title)
         if not team or not DEAL_WORDS.search(title) or RUMOR_WORDS.search(title):
             continue
@@ -234,12 +246,12 @@ def check_news(pages=1):
                    if len(ps) == 1 and re.search(rf"\b{re.escape(n)}\b", t)]
         if not matches:
             continue
-        desc = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ",
-                      item.findtext("description") or "")))
-        years, total = parse_terms(desc) if len(matches) == 1 else (None, None)
+        text = news_contracts.text_of(item)            # full story, not just the summary
+        terms = news_contracts.parse_contract(text, "signing") if len(matches) == 1 else {}
+        years, total = terms.get("years"), terms.get("total_m")
         for p in matches:
             record_signing(p, "Reported", team, years=years, total=total,
-                           minors=bool(MINORS_RE.search(title + " " + desc)),
+                           minors=bool(MINORS_RE.search(title + " " + text[:400])),
                            link=item.findtext("link"))
             unsigned.pop(norm(p["name"]), None)
             changed.add(p["name"])
