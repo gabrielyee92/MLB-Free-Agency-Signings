@@ -1,4 +1,4 @@
-﻿"""Streamlit version of the live free agency dashboard.
+"""Streamlit version of the live free agency dashboard.
 
 Runs automatically when Streamlit runs fa_tracker.py (or this file).
 
@@ -180,8 +180,8 @@ def cached_teams():
 
 
 @st.cache_data(ttl=ROSTER_CACHE, show_spinner="Loading roster…")
-def cached_roster(team_id):
-    return rosters.roster(team_id)
+def cached_team_roster(team_id, mlb_deals):
+    return rosters.team_roster(team_id, mlb_deals)
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -196,35 +196,62 @@ def num(v):
         return None
 
 
-def hitter_row(r, contract):
-    h = r["hitting"]
-    return {"Player": r["name"], "Pos": r["pos"], "Age": r["age"], "B": r["bats"],
-            "Status": r["status"], "Contract": contract,
-            "G": h.get("gamesPlayed"), "PA": h.get("plateAppearances"),
-            "AVG": h.get("avg"), "OBP": h.get("obp"), "SLG": h.get("slg"),
-            "OPS": h.get("ops"), "HR": h.get("homeRuns"), "RBI": h.get("rbi"),
-            "SB": h.get("stolenBases")}
+def stats_of(r, group, minors):
+    """MLB stats for the MLB roster, minor-league stats for the minors."""
+    return (r.get("milb", {}) if minors else r).get(group) or {}
 
 
-def pitcher_row(r, contract):
-    p = r["pitching"]
-    return {"Player": r["name"], "Age": r["age"], "T": r["throws"],
-            "Status": r["status"], "Contract": contract,
-            "G": p.get("gamesPlayed"), "GS": p.get("gamesStarted"),
-            "IP": p.get("inningsPitched"), "W": p.get("wins"), "L": p.get("losses"),
-            "ERA": p.get("era"), "WHIP": p.get("whip"), "SO": p.get("strikeOuts"),
-            "BB": p.get("baseOnBalls"), "SV": p.get("saves")}
+def player_cols(r, contract, minors, hand):
+    cols = {"Player": r["name"], "Pos": r["pos"], "Age": r["age"], hand[0]: r[hand[1]]}
+    if minors:
+        cols |= {"Level": r.get("milb", {}).get("level") or "–",
+                 "Affiliate": r.get("milb", {}).get("team") or ""}
+    return cols | {"Status": r["status"], "Contract": contract}
 
 
-def roster_table(rows, make_row, sort_key, new_names, contracts):
-    rows = sorted(rows, key=lambda r: -(num(sort_key(r)) or -1))
-    df = pd.DataFrame([make_row(r, contracts.get(ld.norm(r["name"]), "")) for r in rows])
-    out = styled(df, [ld.norm(r["name"]) in new_names for r in rows], GREEN)
+def hitter_row(r, contract, minors):
+    h = stats_of(r, "hitting", minors)
+    return player_cols(r, contract, minors, ("B", "bats")) | {
+        "G": h.get("gamesPlayed"), "PA": h.get("plateAppearances"),
+        "AVG": h.get("avg"), "OBP": h.get("obp"), "SLG": h.get("slg"),
+        "OPS": h.get("ops"), "HR": h.get("homeRuns"), "RBI": h.get("rbi"),
+        "SB": h.get("stolenBases")}
+
+
+def pitcher_row(r, contract, minors):
+    p = stats_of(r, "pitching", minors)
+    return player_cols(r, contract, minors, ("T", "throws")) | {
+        "G": p.get("gamesPlayed"), "GS": p.get("gamesStarted"),
+        "IP": p.get("inningsPitched"), "W": p.get("wins"), "L": p.get("losses"),
+        "ERA": p.get("era"), "WHIP": p.get("whip"), "SO": p.get("strikeOuts"),
+        "BB": p.get("baseOnBalls"), "SV": p.get("saves")}
+
+
+def roster_table(rows, pitchers, minors, new_names, contracts):
+    make, group, key = ((pitcher_row, "pitching", "inningsPitched") if pitchers
+                        else (hitter_row, "hitting", "plateAppearances"))
+    rows = sorted(rows, key=lambda r: -(num(stats_of(r, group, minors).get(key)) or -1))
+    df = pd.DataFrame([make(r, contracts.get(ld.norm(r["name"]), ""), minors) for r in rows])
     if df.empty:
-        return out
-    whole = lambda v: "" if pd.isna(v) else f"{int(v)}"
+        return df
+    df = df.astype(object).where(df.notna(), "")   # Streamlit draws missing values as "None"
+    out = styled(df, [ld.norm(r["name"]) in new_names for r in rows], GREEN)
+    whole = lambda v: "" if v == "" else f"{int(v)}"
     counts = ("Age", "G", "PA", "HR", "RBI", "SB", "GS", "W", "L", "SO", "BB", "SV")
-    return out.format({c: whole for c in counts if c in df}, na_rep="")
+    return out.format({c: whole for c in counts if c in df})
+
+
+def roster_section(title, note, rows, minors, new_names, contracts):
+    with st.container(border=True):
+        st.subheader(title)
+        st.caption(note)
+        for label, pitchers in (("Position players", False), ("Pitchers", True)):
+            part = [r for r in rows if (rosters.is_pitcher(r) if pitchers else rosters.is_hitter(r))]
+            st.markdown(f"**{label} ({len(part)})**")
+            if part:
+                st.dataframe(roster_table(part, pitchers, minors, new_names, contracts),
+                             hide_index=True, width="stretch",
+                             height=min(38 + 35 * len(part), 600))
 
 
 def rosters_tab():
@@ -244,18 +271,22 @@ def rosters_tab():
         contracts = {ld.norm(p["name"]): deal(p) for p in incoming}
         new_names = set(contracts)
 
-        roster = cached_roster(team["id"])
-        on_roster = {ld.norm(r["name"]) for r in roster}
+        data = cached_team_roster(team["id"], tuple(sorted(p["name"] for p in incoming)))
+        rows = list(data["rows"])
+        on_roster = {ld.norm(r["name"]) for r in rows}
         for p in incoming:                          # deals not on the 40-man yet
             if ld.norm(p["name"]) not in on_roster and (r := cached_player(p["name"])):
-                r = dict(r, status="Reported, not on 40-man yet"
-                         if ld.REPORTED in (p["notes"] or "") else "Signed, not on 40-man yet")
-                roster = roster + [r]
+                rows.append(dict(r, group=rosters.MLB, milb={}, status=(
+                    "Reported, not on 40-man yet" if ld.REPORTED in (p["notes"] or "")
+                    else "Signed, not on 40-man yet")))
+        mlb = [r for r in rows if r["group"] == rosters.MLB]
+        minors = [r for r in rows if r["group"] == rosters.MINORS]
 
-        c1, c2, c3 = st.columns(3)
-        c1.metric("40-man roster", len([r for r in roster if r["status"] and "not on" not in r["status"]]))
-        c2.metric("Free agents added", len(incoming))
-        c3.metric("Free agents lost / unsigned", len(outgoing))
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("MLB roster", len(mlb))
+        c2.metric("Minor leagues (40-man)", len(minors))
+        c3.metric("Free agents added", len(incoming))
+        c4.metric("Free agents lost / unsigned", len(outgoing))
 
         with st.expander(f"{team['name']} free agency moves", expanded=bool(incoming or outgoing)):
             a, b = st.columns(2)
@@ -271,19 +302,21 @@ def rosters_tab():
                                             "Deal": deal(p) if p["signed"] else ""} for p in outgoing]),
                              hide_index=True, width="stretch")
 
-        st.caption(f"{season} season stats from MLB. Green rows = signed this offseason. "
-                   "Contracts are shown for this offseason's free agent signings only; "
-                   "MLB's data doesn't include salaries.")
-        st.subheader("Position players")
-        st.dataframe(roster_table([r for r in roster if rosters.is_hitter(r)], hitter_row,
-                                  lambda r: r["hitting"].get("plateAppearances"),
-                                  new_names, contracts),
-                     hide_index=True, width="stretch", height=560)
-        st.subheader("Pitchers")
-        st.dataframe(roster_table([r for r in roster if rosters.is_pitcher(r)], pitcher_row,
-                                  lambda r: r["pitching"].get("inningsPitched"),
-                                  new_names, contracts),
-                     hide_index=True, width="stretch", height=640)
+        st.caption("Green rows = signed this offseason. Contracts are shown for this "
+                   "offseason's free agent signings only; MLB's data doesn't include salaries.")
+        if data["in_season"]:
+            mlb_note = f"Today's 26-man active roster plus the injured list · {season} MLB stats"
+        else:
+            mlb_note = (f"Offseason: there's no 26-man roster until Opening Day. This group is "
+                        f"based on the {data['label'][0].lower() + data['label'][1:]} "
+                        f"(rosters expand to 28 in September) and the injured list then, minus "
+                        f"players who have left, plus newcomers who played mostly in the majors · "
+                        f"{season} MLB stats")
+        roster_section(f"🏟️ MLB roster ({len(mlb)})", mlb_note, mlb, False, new_names, contracts)
+        roster_section(f"🌱 Minor leagues — rest of the 40-man ({len(minors)})",
+                       f"On the 40-man roster but playing in the minors · {season} minor-league "
+                       f"stats, all levels combined · Level = highest level reached",
+                       minors, True, new_names, contracts)
 
     view()
 
