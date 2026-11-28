@@ -23,7 +23,9 @@ from fa_tracker import BIG_AAV_M, BIG_TOTAL_M
 
 REFRESH = "3s"           # how often the free agency board redraws
 ROSTER_REFRESH = "30s"   # how often the roster tab redraws
-ROSTER_CACHE = 60        # seconds before re-downloading a roster
+ROSTER_CACHE = 30        # seconds before re-downloading a roster
+LIVE_TTL = 30            # seconds any live data is cached
+PAYROLLS_REFRESH = "30s" # how often the payrolls tab redraws
 POLL_MINUTES = 0.5       # how often MLB / news feeds are checked (30 seconds)
 BANNER_MINUTES = 30      # how long a big-name banner stays up
 TZ = ZoneInfo("America/Los_Angeles")
@@ -159,11 +161,11 @@ def free_agency_tab(q, pos, big_only, hide_minors):
         c4.metric("★ Big names left", sum(p["big"] for p in left))
         st.progress(len(signed) / max(len(players), 1))
 
-        if events:
-            st.markdown("**Latest:** " + " · ".join(
-                f"🔄 {e['name']}" if e.get("kind", "").startswith("trade")
-                else f"{'★ ' if e['big'] else ''}{e['name']} → {e['team']}"
-                for e in reversed(events[-10:])))
+        moves = latest_moves(players, events, 10)
+        if moves:
+            st.markdown("**Latest moves:** " + " · ".join(
+                f"{'★ ' if m['big'] else ''}{'🔄 ' if m['type'].startswith('Trade') else ''}"
+                f"{m['player']}{' → ' + m['to'] if m['to'] else ''}" for m in moves))
 
         shown_signed = [p for p in signed if keep(p) and not (
             hide_minors and "minor league" in (p["notes"] or "").lower())]
@@ -193,7 +195,7 @@ def cached_team_roster(team_id, mlb_deals):
     return rosters.team_roster(team_id, mlb_deals)
 
 
-@st.cache_data(ttl=600, show_spinner=False)
+@st.cache_data(ttl=LIVE_TTL, show_spinner=False)
 def cached_player(name):
     return rosters.player(name)
 
@@ -210,7 +212,7 @@ def stats_of(r, group, minors):
     return (r.get("milb", {}) if minors else r).get(group) or {}
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=LIVE_TTL, show_spinner=False)
 def last_season_salaries():
     """(season, {player: $M}) for the highest salaries listed by The Baseball Cube."""
     import payroll_history as ph
@@ -306,7 +308,7 @@ def payroll_block(team, rows, deals):
         st.caption(PAYROLL_NOTE)
 
 
-@st.cache_data(ttl=300, show_spinner=False)
+@st.cache_data(ttl=LIVE_TTL, show_spinner=False)
 def cached_roster_names(team_id):
     return rosters.roster_names(team_id)
 
@@ -315,7 +317,7 @@ TBC_LINK = "[The Baseball Cube](https://www.thebaseballcube.com/content/payroll_
 BLUE = "#2a78d6"          # validated categorical slot 1 (single-series charts)
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=LIVE_TTL, show_spinner=False)
 def payroll_history():
     import payroll_history as ph
     df = pd.DataFrame(ph.read())
@@ -366,6 +368,10 @@ def team_trend(df):
 
 
 def payrolls_tab():
+    st.fragment(run_every=PAYROLLS_REFRESH)(payrolls_view)()
+
+
+def payrolls_view():
     teams = cached_teams()
     deals = contracts.load_contracts()
     fa = ld.load()
@@ -462,24 +468,56 @@ def payrolls_tab():
             hide_index=True, width="stretch")
 
 
+# ---------- latest moves (signings + trades) ----------
+
+def latest_moves(players, events, n=25):
+    """Newest player moves first: signings from the board (with their dates),
+    official trades, and trades just reported by MLB Trade Rumors."""
+    moves = []
+    for p in players:
+        if p.get("signed") and p.get("signed_date"):
+            notes = p.get("notes") or ""
+            moves.append({"date": p["signed_date"], "type": "Signing" + (
+                " (reported)" if ld.REPORTED in notes else ""), "player": p["name"],
+                "from": p.get("old_team", ""), "to": p.get("new_team", ""),
+                "deal": deal(p) if p.get("years") else ("minor league deal" if "minor league"
+                                                         in notes.lower() else ""),
+                "big": bool(p.get("big"))})
+    try:
+        official = cached_trades()
+    except Exception:
+        official = []
+    for t in official:
+        for mv in t["moves"]:
+            moves.append({"date": t["date"][:10], "type": "Trade", "player": mv["name"],
+                          "from": ld.find_team(mv["from"]), "to": ld.find_team(mv["to"]),
+                          "deal": "", "big": False})
+    for e in events:
+        if e.get("kind") == "trade_reported":
+            moves.append({"date": e["time"][:10], "type": "Trade (reported)", "player": e["name"],
+                          "from": "", "to": "", "deal": "", "big": False})
+    moves.sort(key=lambda m: (m["date"], m["big"]), reverse=True)
+    return moves[:n]
+
+
 # ---------- Trades tab ----------
 
-TRADES_REFRESH = "60s"
+TRADES_REFRESH = "30s"
 
 
-@st.cache_data(ttl=60, show_spinner=False)
+@st.cache_data(ttl=LIVE_TTL, show_spinner=False)
 def cached_trades():
     import trades
     return trades.recent_trades()
 
 
-@st.cache_data(ttl=600, show_spinner=False)
+@st.cache_data(ttl=LIVE_TTL, show_spinner=False)
 def cached_trade_players(ids):
     import trades
     return trades.players(list(ids))
 
 
-@st.cache_data(ttl=300, show_spinner=False)
+@st.cache_data(ttl=LIVE_TTL, show_spinner=False)
 def recent_news_titles(pages=4):
     import html as _html
     import xml.etree.ElementTree as ET
@@ -511,7 +549,16 @@ def trades_tab():
     @st.fragment(run_every=TRADES_REFRESH)
     def view():
         everything = cached_trades()
-        st.subheader("🔄 Trades")
+        st.subheader("🔄 Trades and latest moves")
+        snap = ld.snapshot()
+        moves = latest_moves(snap["players"], snap["events"], 25)
+        if moves:
+            st.markdown("**Latest moves (signings and trades, newest first)**")
+            st.dataframe(pd.DataFrame([{"Date": m["date"], "Move": m["type"],
+                                        "Player": ("★ " if m["big"] else "") + m["player"],
+                                        "From": m["from"], "To": m["to"], "Deal": m["deal"]}
+                                       for m in moves]),
+                         hide_index=True, width="stretch", height=38 + 35 * min(len(moves), 12))
 
         reported = [e for e in ld.snapshot()["events"] if e.get("kind") == "trade_reported"]
         if reported:
@@ -522,12 +569,12 @@ def trades_tab():
         periods = ["All"] + sorted({t.get("period", "Other") for t in everything}, reverse=True)
         period = st.radio("Show", periods, horizontal=True, key="trade_period")
         all_trades = [t for t in everything if period == "All" or t.get("period", "Other") == period]
-        st.caption(f"{len(all_trades)} official trades from MLB's transaction feed (checked every "
-                   "minute; reported trades from MLB Trade Rumors every 30 seconds). Fit and "
+        st.caption(f"{len(all_trades)} official trades from MLB's transaction feed and trades "
+                   "reported by MLB Trade Rumors, both checked every 30 seconds. Fit and "
                    "impact notes compare each player's 2026 stats with the players at his "
                    "position on each team's roster today (OPS for hitters with 100+ PA, ERA for "
-                   "pitchers with 20+ IP). They're simple comparisons, not projections. "
-                   "Free agent signings, like Skubal to the Mets, are on the Free Agency tab.")
+                   "starters with 60+ IP, relievers with 20+). They're simple comparisons, "
+                   "not projections.")
         if not all_trades:
             st.info("No official trades in this period yet.")
             return
