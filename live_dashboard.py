@@ -23,7 +23,8 @@ import unicodedata
 import urllib.request
 import webbrowser
 import xml.etree.ElementTree as ET
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
+from email.utils import parsedate_to_datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -206,6 +207,46 @@ def check_mlb():
             changed.add(p["name"])
     if changed:
         commit(players, changed)
+    # official trades: one pop-up per trade (all parts share an id)
+    trades = {}
+    for tx in txs:
+        if tx.get("typeCode") == "TR" and tx.get("id") not in seen:
+            trades.setdefault(tx["id"], []).append(tx)
+    for tid, parts in trades.items():
+        state["seen_tx"].append(tid)
+        if parts[0].get("date", "") >= (date.today() - timedelta(days=2)).isoformat():
+            add_trade_event(f"trade|{tid}", "trade", trade_text(parts), parts[0].get("date"))
+
+
+# ---------- trades ----------
+
+TRADE_WORDS = re.compile(r"\b(trade|trades|traded|acquire|acquires|acquired)\b", re.I)
+NOT_A_TRADE = re.compile(
+    r"\b(willing|open to|shopping|explor\w*|listening|could|would|might|may|chance|"
+    r"interest|interested|rumou?rs?|talks?|discuss\w*|market|candidates?|chips?|"
+    r"deadline|opener|chat|mailbag|poll|recap|nearing|close to|expected|likely|"
+    r"considering|pursu\w*|targets?|eyeing|linked|haven.t|hasn.t|not)\b", re.I)
+
+
+def trade_text(parts):
+    """'Henry Davis PIT→ARI · Tim Tawa ARI→PIT' (or cash/considerations)."""
+    bits = []
+    for tx in parts:
+        who = (tx.get("person") or {}).get("fullName")
+        if who:
+            frm = find_team((tx.get("fromTeam") or {}).get("name", "")) or "?"
+            to = find_team((tx.get("toTeam") or {}).get("name", "")) or "?"
+            bits.append(f"{who} {frm}→{to}")
+    return " · ".join(bits) or parts[0].get("description", "Trade")
+
+
+def add_trade_event(eid, kind, text, when=None, link=None):
+    if any(e["id"] == eid for e in state["events"]):
+        return
+    state["events"].append({
+        "id": eid, "kind": kind, "time": datetime.now().isoformat(timespec="seconds"),
+        "date": when, "name": text, "team": "", "pos": "", "old_team": "", "big": False,
+        "years": None, "total_m": None, "rank": None, "source": kind, "link": link})
 
 
 def check_news(pages=1):
@@ -227,6 +268,17 @@ def check_news(pages=1):
             continue
         state["seen_news"].append(guid)
         title = html.unescape(item.findtext("title") or "")
+        # reported trades (before MLB makes them official); only fresh ones pop up
+        if (TRADE_WORDS.search(title) and not NOT_A_TRADE.search(title)
+                and find_team(title)):
+            try:
+                fresh = parsedate_to_datetime(item.findtext("pubDate")).date() >= \
+                    date.today() - timedelta(days=2)
+            except (TypeError, ValueError):
+                fresh = True
+            if fresh:
+                add_trade_event(f"tradenews|{guid}", "trade_reported", title,
+                                link=item.findtext("link"))
         # extensions, arbitration deals and other contracts -> salaries.csv
         try:
             recorded = news_contracts.handle(item, title, skip_names=board)

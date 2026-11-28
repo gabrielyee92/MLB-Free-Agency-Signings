@@ -92,7 +92,14 @@ def pop_ups(events):
     for e in events:
         if e["id"] in seen:
             continue
-        if e["big"]:
+        kind = e.get("kind", "signing")
+        if kind == "trade":
+            st.toast(f"**🔄 TRADE (official)**  \n{e['name']}", icon="🔄", duration="long")
+        elif kind == "trade_reported":
+            st.toast(f"**🔄 TRADE (reported)**  \n{e['name']}"
+                     + (f"  \n[MLB Trade Rumors]({e['link']})" if e.get("link") else ""),
+                     icon="🔄", duration="long")
+        elif e["big"]:
             st.toast(f"**★ BIG NAME: {e['name']} → {e['team']}**  \n{deal(e)}", icon="⭐",
                      duration="long")
             st.balloons()
@@ -154,7 +161,8 @@ def free_agency_tab(q, pos, big_only, hide_minors):
 
         if events:
             st.markdown("**Latest:** " + " · ".join(
-                f"{'★ ' if e['big'] else ''}{e['name']} → {e['team']}"
+                f"🔄 {e['name']}" if e.get("kind", "").startswith("trade")
+                else f"{'★ ' if e['big'] else ''}{e['name']} → {e['team']}"
                 for e in reversed(events[-10:])))
 
         shown_signed = [p for p in signed if keep(p) and not (
@@ -502,14 +510,26 @@ def trades_tab():
 
     @st.fragment(run_every=TRADES_REFRESH)
     def view():
-        all_trades = cached_trades()
-        st.subheader(f"🔄 Trades this offseason ({len(all_trades)})")
-        st.caption("Official trades from MLB's transaction feed, checked every minute. Fit and "
+        everything = cached_trades()
+        st.subheader("🔄 Trades")
+
+        reported = [e for e in ld.snapshot()["events"] if e.get("kind") == "trade_reported"]
+        if reported:
+            st.markdown("**📰 Just reported (may not be official yet)**")
+            st.markdown("\n".join(f"- [{e['name']}]({e['link']}) · {local(e['time']):%b %d %I:%M %p} PT"
+                                  for e in reversed(reported[-8:])))
+
+        periods = ["All"] + sorted({t["period"] for t in everything}, reverse=True)
+        period = st.radio("Show", periods, horizontal=True, key="trade_period")
+        all_trades = [t for t in everything if period == "All" or t["period"] == period]
+        st.caption(f"{len(all_trades)} official trades from MLB's transaction feed (checked every "
+                   "minute; reported trades from MLB Trade Rumors every 30 seconds). Fit and "
                    "impact notes compare each player's 2026 stats with the players at his "
-                   "position on each team (OPS for hitters with 100+ PA, ERA for pitchers with "
-                   "20+ IP). They're simple comparisons, not projections.")
+                   "position on each team's roster today (OPS for hitters with 100+ PA, ERA for "
+                   "pitchers with 20+ IP). They're simple comparisons, not projections. "
+                   "Free agent signings, like Skubal to the Mets, are on the Free Agency tab.")
         if not all_trades:
-            st.info("No trades yet this offseason.")
+            st.info("No official trades in this period yet.")
             return
         labels = [trade_label(t) for t in all_trades]
         pick = st.selectbox("Trade", labels, key="trade_pick")
@@ -566,6 +586,9 @@ def trades_tab():
                 st.caption(f"{p['pos']} · {trades.ROLE_NAME.get(trades.role(p), trades.role(p))} · "
                            f"age {p['age']} · {trades.stat_text(p)}"
                            + (" · " + " · ".join(pay_bits) if pay_bits else ""))
+                if note := trades.moved_on(p, m["to"]):
+                    st.info(f"{note} The notes below describe the trade as it looked for "
+                            f"today's {nickname(m['to'])} and {nickname(m['from'])} rosters.")
                 a, b = st.columns(2)
                 with a:
                     st.markdown(f"**How he fits the {nickname(m['to'])}**")

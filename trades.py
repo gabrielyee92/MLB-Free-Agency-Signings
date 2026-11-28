@@ -19,7 +19,7 @@ from live_dashboard import fetch, find_team, norm
 
 API = "https://statsapi.mlb.com/api/v1"
 OFFSEASON_START = "2026-11-01"
-MIN_PA, MIN_IP = 100, 20          # enough MLB playing time to compare
+MIN_PA, MIN_IP, MIN_IP_SP = 100, 20, 60   # enough MLB playing time to compare
 OF = {"LF", "CF", "RF", "OF"}
 
 
@@ -29,8 +29,10 @@ def _get(path):
 
 # ---------- the trades ----------
 
-def recent_trades(since=OFFSEASON_START):
-    """Trades since `since`, newest first, grouped by MLB's transaction id."""
+def recent_trades(since=None):
+    """Trades since `since` (default: Jan. 1 of the latest season, so the trade
+    deadline is included), newest first, grouped by MLB's transaction id."""
+    since = since or f"{rosters.stats_season()}-01-01"
     q = f"transactions?sportId=1&startDate={since}&endDate={date.today().isoformat()}"
     by_id = {}
     for tx in _get(q).get("transactions", []):
@@ -49,6 +51,12 @@ def recent_trades(since=OFFSEASON_START):
                                "from_id": frm.get("id"), "from": frm.get("name", ""),
                                "to_id": to.get("id"), "to": to.get("name", "")})
     trades = [t for t in by_id.values() if t["moves"]]
+    start, end, _ = rosters.season_dates()
+    for t in trades:
+        d = date.fromisoformat(t["date"][:10]) if t["date"] else date.today()
+        t["period"] = (f"{end.year} regular season" if start <= d <= end
+                       else f"{end.year}-{(end.year + 1) % 100:02d} offseason" if d > end
+                       else f"{end.year - 1}-{end.year % 100:02d} offseason")
     return sorted(trades, key=lambda t: (t["date"], t["id"]), reverse=True)
 
 
@@ -57,11 +65,12 @@ def players(ids, season=None):
     if not ids:
         return {}
     season = season or rosters.stats_season()
-    q = (f"people?personIds={','.join(map(str, ids))}&hydrate=stats(type=season,"
+    q = (f"people?personIds={','.join(map(str, ids))}&hydrate=currentTeam,stats(type=season,"
          f"season={season},group=[hitting,pitching])")
     out = {}
     for p in _get(q).get("people", []):
         row = rosters._row(p, p.get("primaryPosition", {}).get("abbreviation", ""), "", season)
+        row["current_team"] = (p.get("currentTeam") or {}).get("name", "")
         out[p["id"]] = row
     milb = rosters.minor_league_stats(list(out), season)
     for pid, row in out.items():
@@ -105,7 +114,8 @@ def mlb_line(r):
     if is_pitcher_role(role(r)):
         st = r["pitching"]
         ip = _ip(st.get("inningsPitched"))
-        if ip >= MIN_IP and _f(st.get("era")) is not None:
+        need = MIN_IP_SP if role(r) == "SP" else MIN_IP
+        if ip >= need and _f(st.get("era")) is not None:
             return (_f(st["era"]), ip, f"{st['era']} ERA in {st['inningsPitched']} IP")
         return None
     st = r["hitting"]
@@ -184,7 +194,7 @@ def fit(player, new_team_rows, team_name):
         return out
     if not peers:
         out.append(f"Fills a hole: {team_name} had no other {what} with "
-                   f"{MIN_IP if pitch else MIN_PA}+ {'IP' if pitch else 'PA'} on its MLB roster.")
+                   f"{(MIN_IP_SP if rl == 'SP' else MIN_IP) if pitch else MIN_PA}+ {'IP' if pitch else 'PA'} on its MLB roster.")
         return out
     rank = 1 + sum(1 for _, l in peers if better(l[0], line[0]))
     top, top_line = peers[0]
@@ -266,3 +276,13 @@ def story_link(trade, news_items):
                 w in title for w in ("Trade", "Acquire", "Deal", "Swap")):
             return title, link
     return None
+
+
+def moved_on(player, to_team):
+    """Note when a traded player is no longer with the team that got him."""
+    now = player.get("current_team") or ""
+    if not now or find_team(now) == find_team(to_team):
+        return ""
+    if find_team(now):
+        return f"Has since moved on: now with the {now}."
+    return f"Has since left the {to_team} (now {now})."

@@ -94,7 +94,7 @@ Payrolls follow each team's current 40-man roster, so traded players' salaries m
 
 ## Trades
 
-The **Trades** tab lists every official trade this offseason (MLB's transaction feed, checked every minute). For each trade it shows each team's side (record, payroll, players in and out, whether it got younger or older), a link to the MLB Trade Rumors story, and for every player:
+The **Trades** tab lists every official trade of the season, including the trade deadline (MLB's transaction feed, checked every 30 seconds), filterable by period, plus trades just reported by MLB Trade Rumors before they're official. New trades also pop up on the Free Agency board. For each trade it shows each team's side (record, payroll, players in and out, whether it got younger or older), a link to the MLB Trade Rumors story, and for every player:
 
 - **How he fits his new team**: where his 2026 stats rank among the team's players at his position (OPS for hitters with 100+ PA, ERA for pitchers with 20+ IP) and the likely role (starter, platoon, bench; rotation spot; bullpen leverage), or prospect/depth if he has little MLB time.
 - **What it means for his old team**: where he ranked there, who's next in line, or whether it leaves a hole.
