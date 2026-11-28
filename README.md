@@ -87,3 +87,7 @@ python fa_tracker.py contracts --pages 20     # ~15 stories per page, about half
 ```
 
 Payrolls follow each team's current 40-man roster, so traded players' salaries move with them automatically. Streamlit Cloud forgets file changes when it restarts; run the command above locally and push `salaries.csv` to keep what it found.
+
+### Payroll history
+
+`payroll_history.csv` holds final team payrolls for 1988-2026 from [The Baseball Cube](https://www.thebaseballcube.com/content/payroll_year/2026/), used with credit as its FAQ allows (team totals only). Refresh a season after it ends with `python payroll_history.py 2027` (it reads one page every 10 seconds). The Payrolls tab ranks all teams for any season, shows each team's payroll history, and adds the money already committed for 2027-2032.

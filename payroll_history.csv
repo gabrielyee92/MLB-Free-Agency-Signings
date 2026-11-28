@@ -1,0 +1,1141 @@
+year,team,abbr,payroll,wins,losses,top_salary
+1988,New York Yankees,NYY,18909152,85,76,Don Mattingly
+1988,Detroit Tigers,DET,15597071,88,74,Jack Morris
+1988,Boston Red Sox,BOS,15544592,89,73,Jim Rice
+1988,New York Mets,NYM,15502714,100,60,Gary Carter
+1988,Los Angeles Dodgers,LAD,15462515,94,67,Fernando Valenzuela
+1988,St. Louis Cardinals,STL,14000000,76,86,Ozzie Smith
+1988,Houston Astros,HOU,13454667,82,80,Dave Smith
+1988,Philadelphia Phillies,PHI,12998000,65,96,Mike Schmidt
+1988,Chicago Cubs,CHC,12339833,77,85,Rick Sutcliffe
+1988,San Francisco Giants,SF,12188000,83,79,Brett Butler
+1988,Minnesota Twins,MIN,12154800,91,71,Gary Gaetti
+1988,Toronto Blue Jays,TOR,11673725,87,75,George Bell
+1988,Kansas City Royals,KC,11558873,84,77,George Brett
+1988,Oakland Athletics,ATH,11380183,104,58,Carney Lansford
+1988,California Angels,LAA,10932388,75,87,Mike Witt
+1988,Milwaukee Brewers,MIL,10214000,87,75,Paul Molitor
+1988,Baltimore Orioles,BAL,9995404,54,107,Eddie Murray
+1988,Atlanta Braves,ATL,9967167,54,106,Dale Murphy
+1988,San Diego Padres,SD,9878168,83,78,Keith Moreland
+1988,Montreal Expos,WSH,8852333,81,81,Tim Raines
+1988,Cincinnati Reds,CIN,8368833,87,74,Mario Soto
+1988,Cleveland Indians,CLE,7819500,78,84,Julio Franco
+1988,Pittsburgh Pirates,PIT,7627500,85,75,Andy Van Slyke
+1988,Seattle Mariners,SEA,6545950,68,93,Steve Trout
+1988,Texas Rangers,TEX,6008000,70,91,Charlie Hough
+1988,Chicago White Sox,CWS,5906952,71,90,Harold Baines
+1989,Los Angeles Dodgers,LAD,21584161,77,83,Orel Hershiser
+1989,New York Yankees,NYY,20562985,74,87,Don Mattingly
+1989,New York Mets,NYM,20013212,87,75,Dwight Gooden
+1989,Boston Red Sox,BOS,18553385,83,79,Jim Rice
+1989,Houston Astros,HOU,16011000,86,76,Mike Scott
+1989,Toronto Blue Jays,TOR,16009666,89,73,George Bell
+1989,St. Louis Cardinals,STL,15555333,86,76,Dan Quisenberry
+1989,Minnesota Twins,MIN,15540500,80,82,Frank Viola
+1989,Kansas City Royals,KC,15421662,92,70,Willie Wilson
+1989,Detroit Tigers,DET,15099596,59,103,Jack Morris
+1989,California Angels,LAA,14713833,91,71,Chili Davis
+1989,Oakland Athletics,ATH,14602999,99,63,Jose Canseco
+1989,San Francisco Giants,SF,14094000,92,70,Rick Reuschel
+1989,San Diego Padres,SD,13094000,89,73,Jack Clark
+1989,Montreal Expos,WSH,12305389,81,81,Tim Raines
+1989,Pittsburgh Pirates,PIT,11993500,74,88,Andy Van Slyke
+1989,Cincinnati Reds,CIN,11087000,75,87,Eric Davis
+1989,Texas Rangers,TEX,10689500,83,79,Nolan Ryan
+1989,Milwaukee Brewers,MIL,10373000,81,81,Paul Molitor
+1989,Chicago Cubs,CHC,10165500,93,69,Rick Sutcliffe
+1989,Philadelphia Phillies,PHI,9640000,67,95,Juan Samuel
+1989,Atlanta Braves,ATL,9551334,63,97,Dale Murphy
+1989,Seattle Mariners,SEA,9547500,73,89,Alvin Davis
+1989,Cleveland Indians,CLE,8928500,73,89,Joe Carter
+1989,Baltimore Orioles,BAL,8176666,87,75,Cal Ripken
+1989,Chicago White Sox,CWS,7595561,69,92,Harold Baines
+1990,Kansas City Royals,KC,23873745,75,86,George Brett
+1990,New York Mets,NYM,22518834,91,71,Frank Viola
+1990,California Angels,LAA,21870000,80,82,Lance Parrish
+1990,Los Angeles Dodgers,LAD,21618704,86,76,Eddie Murray
+1990,New York Yankees,NYY,20991318,67,95,Don Mattingly
+1990,Boston Red Sox,BOS,20983333,88,74,Roger Clemens
+1990,San Francisco Giants,SF,20942333,85,77,Will Clark
+1990,St. Louis Cardinals,STL,20923334,70,92,Pedro Guerrero
+1990,Milwaukee Brewers,MIL,20019167,74,88,Robin Yount
+1990,Oakland Athletics,ATH,19987501,103,59,Rickey Henderson
+1990,Houston Astros,HOU,18830000,75,87,Mike Scott
+1990,San Diego Padres,SD,18588334,75,87,Jack Clark
+1990,Toronto Blue Jays,TOR,18486834,86,76,George Bell
+1990,Detroit Tigers,DET,18092238,79,83,Jack Morris
+1990,Montreal Expos,WSH,16656388,85,77,Tim Raines
+1990,Pittsburgh Pirates,PIT,15656000,95,67,Bobby Bonilla
+1990,Cleveland Indians,CLE,15152000,77,85,Keith Hernandez
+1990,Minnesota Twins,MIN,15106000,74,88,Kirby Puckett
+1990,Texas Rangers,TEX,15104372,83,79,Julio Franco
+1990,Cincinnati Reds,CIN,14769500,91,71,Tom Browning
+1990,Chicago Cubs,CHC,14496000,77,85,Andre Dawson
+1990,Philadelphia Phillies,PHI,13953667,77,85,Von Hayes
+1990,Atlanta Braves,ATL,13328334,65,97,Dale Murphy
+1990,Seattle Mariners,SEA,12941667,77,85,Alvin Davis
+1990,Baltimore Orioles,BAL,10037084,76,85,Cal Ripken
+1990,Chicago White Sox,CWS,9496238,94,68,Carlton Fisk
+1991,Oakland Athletics,ATH,33632500,84,78,Jose Canseco
+1991,Los Angeles Dodgers,LAD,33216664,93,69,Darryl Strawberry
+1991,Boston Red Sox,BOS,32767500,84,78,Danny Darwin
+1991,New York Mets,NYM,32590002,77,84,Frank Viola
+1991,California Angels,LAA,31782501,81,81,Mark Langston
+1991,San Francisco Giants,SF,30839333,75,87,Kevin Mitchell
+1991,Kansas City Royals,KC,28722662,82,80,Mark Davis
+1991,New York Yankees,NYY,27815835,71,91,Don Mattingly
+1991,Toronto Blue Jays,TOR,27538751,91,71,Joe Carter
+1991,Chicago Cubs,CHC,26923120,77,83,Andre Dawson
+1991,Cincinnati Reds,CIN,25369166,74,88,Eric Davis
+1991,Milwaukee Brewers,MIL,24398000,83,79,Paul Molitor
+1991,Detroit Tigers,DET,23736334,84,78,Alan Trammell
+1991,Pittsburgh Pirates,PIT,23064667,98,64,Doug Drabek
+1991,San Diego Padres,SD,22585001,84,78,Fred McGriff
+1991,Minnesota Twins,MIN,22431000,95,67,Jack Morris
+1991,Texas Rangers,TEX,22224500,85,77,Nolan Ryan
+1991,St. Louis Cardinals,STL,21435001,84,78,Lee Smith
+1991,Montreal Expos,WSH,20813500,71,90,Dennis Martinez
+1991,Atlanta Braves,ATL,20423500,94,68,Lonnie Smith
+1991,Philadelphia Phillies,PHI,20298332,78,84,Dale Murphy
+1991,Cleveland Indians,CLE,18270000,57,105,Tom Candiotti
+1991,Chicago White Sox,CWS,16830437,87,75,Tim Raines
+1991,Seattle Mariners,SEA,16126834,83,79,Pete O'Brien
+1991,Baltimore Orioles,BAL,14627334,67,95,Glenn Davis
+1991,Houston Astros,HOU,11546000,65,97,Mike Scott
+1992,New York Mets,NYM,44352002,72,90,Bobby Bonilla
+1992,Los Angeles Dodgers,LAD,43788166,63,99,Orel Hershiser
+1992,Toronto Blue Jays,TOR,43663666,96,66,Jack Morris
+1992,Boston Red Sox,BOS,42203584,73,89,Frank Viola
+1992,Oakland Athletics,ATH,39957834,96,66,Jose Canseco
+1992,New York Yankees,NYY,35966834,76,86,Danny Tartabull
+1992,Cincinnati Reds,CIN,35203999,90,72,Barry Larkin
+1992,Kansas City Royals,KC,33643834,72,90,Wally Joyner
+1992,California Angels,LAA,33529854,72,90,Chuck Finley
+1992,San Francisco Giants,SF,33126168,72,90,Will Clark
+1992,Atlanta Braves,ATL,32975333,98,64,Charlie Leibrandt
+1992,Pittsburgh Pirates,PIT,32589167,96,66,Barry Bonds
+1992,Milwaukee Brewers,MIL,30253668,92,70,Paul Molitor
+1992,Texas Rangers,TEX,29740667,77,85,Ruben Sierra
+1992,Chicago Cubs,CHC,29060833,78,84,Greg Maddux
+1992,Detroit Tigers,DET,28773834,75,87,Cecil Fielder
+1992,Chicago White Sox,CWS,28413500,86,76,George Bell
+1992,San Diego Padres,SD,27584167,82,80,Fred McGriff
+1992,Minnesota Twins,MIN,27432834,90,72,John Smiley
+1992,St. Louis Cardinals,STL,26889836,83,79,Lee Smith
+1992,Philadelphia Phillies,PHI,23804834,70,92,Mitch Williams
+1992,Seattle Mariners,SEA,22483834,64,98,Kevin Mitchell
+1992,Baltimore Orioles,BAL,20997667,89,73,Glenn Davis
+1992,Montreal Expos,WSH,15869667,87,75,Dennis Martinez
+1992,Houston Astros,HOU,13352000,81,81,Doug Jones
+1992,Cleveland Indians,CLE,8236166,76,86,Felix Fermin
+1993,Toronto Blue Jays,TOR,45747666,95,67,Joe Carter
+1993,Cincinnati Reds,CIN,42851167,73,89,Barry Larkin
+1993,New York Yankees,NYY,41305000,88,74,Danny Tartabull
+1993,Kansas City Royals,KC,40102666,84,78,David Cone
+1993,New York Mets,NYM,38350167,59,103,Bobby Bonilla
+1993,Chicago Cubs,CHC,38303166,84,78,Ryne Sandberg
+1993,Atlanta Braves,ATL,38131000,104,58,Greg Maddux
+1993,Los Angeles Dodgers,LAD,37833000,81,81,Orel Hershiser
+1993,Boston Red Sox,BOS,37108583,80,82,Andre Dawson
+1993,Detroit Tigers,DET,36548166,85,77,Mike Henneman
+1993,Texas Rangers,TEX,35641959,86,76,Jose Canseco
+1993,Oakland Athletics,ATH,35535834,68,94,Ruben Sierra
+1993,Chicago White Sox,CWS,34598166,94,68,Jack McDowell
+1993,San Francisco Giants,SF,34567500,103,59,Will Clark
+1993,Seattle Mariners,SEA,31616333,82,80,Ken Griffey
+1993,Houston Astros,HOU,28854500,85,77,Doug Drabek
+1993,Minnesota Twins,MIN,27284933,71,91,Kirby Puckett
+1993,California Angels,LAA,27230334,71,91,Chuck Finley
+1993,Baltimore Orioles,BAL,26914000,85,77,Cal Ripken
+1993,Philadelphia Phillies,PHI,26812334,97,65,Mitch Williams
+1993,San Diego Padres,SD,24557333,61,101,Tony Gwynn
+1993,Pittsburgh Pirates,PIT,23565667,75,87,Andy Van Slyke
+1993,Milwaukee Brewers,MIL,22948834,69,93,Teddy Higuera
+1993,St. Louis Cardinals,STL,22615334,87,75,Ozzie Smith
+1993,Florida Marlins,MIA,18196545,64,98,Bryan Harvey
+1993,Cleveland Indians,CLE,15717667,76,86,Bob Ojeda
+1993,Montreal Expos,WSH,14881334,94,68,Larry Walker
+1993,Colorado Rockies,COL,8829000,67,95,Charlie Hayes
+1994,New York Yankees,NYY,44785334,70,43,Jimmy Key
+1994,Toronto Blue Jays,TOR,41937668,55,60,Joe Carter
+1994,Atlanta Braves,ATL,40502167,68,46,Greg Maddux
+1994,Kansas City Royals,KC,40481334,64,51,David Cone
+1994,San Francisco Giants,SF,40054300,55,60,Barry Bonds
+1994,Detroit Tigers,DET,40042501,53,62,Cecil Fielder
+1994,Cincinnati Reds,CIN,39826333,66,48,John Smiley
+1994,Chicago White Sox,CWS,38413836,67,46,Jack McDowell
+1994,Baltimore Orioles,BAL,37669769,63,49,Cal Ripken
+1994,Los Angeles Dodgers,LAD,37194001,58,56,Tom Candiotti
+1994,Boston Red Sox,BOS,36334084,54,61,Roger Clemens
+1994,Chicago Cubs,CHC,35717333,49,64,Ryne Sandberg
+1994,Oakland Athletics,ATH,33169500,51,63,Rickey Henderson
+1994,Texas Rangers,TEX,32423097,52,62,Jose Canseco
+1994,Houston Astros,HOU,32041500,66,49,Doug Drabek
+1994,Philadelphia Phillies,PHI,31422000,54,61,Doug Jones
+1994,New York Mets,NYM,29890324,55,58,Bobby Bonilla
+1994,St. Louis Cardinals,STL,28956001,53,61,Gregg Jefferies
+1994,Cleveland Indians,CLE,28490167,66,47,Dennis Martinez
+1994,Seattle Mariners,SEA,27872167,49,63,Ken Griffey
+1994,Minnesota Twins,MIN,27641500,53,60,Kirby Puckett
+1994,Milwaukee Brewers,MIL,23375513,53,62,Teddy Higuera
+1994,Colorado Rockies,COL,22979000,53,64,Andres Galarraga
+1994,California Angels,LAA,20691500,47,68,Chuck Finley
+1994,Florida Marlins,MIA,20275500,51,64,Gary Sheffield
+1994,Pittsburgh Pirates,PIT,20265500,53,61,Andy Van Slyke
+1994,Montreal Expos,WSH,18955000,74,40,Larry Walker
+1994,San Diego Padres,SD,13529333,47,70,Tony Gwynn
+1995,Toronto Blue Jays,TOR,49791500,56,88,David Cone
+1995,New York Yankees,NYY,46654016,79,65,Jack McDowell
+1995,Atlanta Braves,ATL,45199000,90,54,Greg Maddux
+1995,Baltimore Orioles,BAL,40835519,71,73,Cal Ripken
+1995,Chicago White Sox,CWS,39632834,68,76,Frank Thomas
+1995,Cincinnati Reds,CIN,37240667,85,59,Barry Larkin
+1995,Oakland Athletics,ATH,35961500,67,77,Mark McGwire
+1995,Detroit Tigers,DET,35862501,60,84,Cecil Fielder
+1995,Cleveland Indians,CLE,35185500,100,44,Dennis Martinez
+1995,San Francisco Giants,SF,34931849,67,77,Barry Bonds
+1995,Seattle Mariners,SEA,34241533,79,66,Ken Griffey
+1995,Chicago Cubs,CHC,32460834,73,71,Mark Grace
+1995,Texas Rangers,TEX,32367226,74,70,Will Clark
+1995,Houston Astros,HOU,31624000,76,68,Jeff Bagwell
+1995,Colorado Rockies,COL,31146135,77,67,Larry Walker
+1995,St. Louis Cardinals,STL,30956000,62,81,Ken Hill
+1995,Los Angeles Dodgers,LAD,30459001,78,66,Todd Worrell
+1995,California Angels,LAA,28974167,78,67,Mark Langston
+1995,Boston Red Sox,BOS,28672250,86,58,Jose Canseco
+1995,Philadelphia Phillies,PHI,28580000,69,75,Lenny Dykstra
+1995,Kansas City Royals,KC,27608834,70,74,Wally Joyner
+1995,San Diego Padres,SD,25923334,70,74,Tony Gwynn
+1995,Minnesota Twins,MIN,24527500,56,88,Kirby Puckett
+1995,New York Mets,NYM,24301440,69,75,Bret Saberhagen
+1995,Florida Marlins,MIA,23670000,67,76,Gary Sheffield
+1995,Pittsburgh Pirates,PIT,17054300,58,86,Jay Bell
+1995,Milwaukee Brewers,MIL,16189600,65,79,Greg Vaughn
+1995,Montreal Expos,WSH,12031000,66,78,Roberto Kelly
+1996,New York Yankees,NYY,52189370,92,70,Ruben Sierra
+1996,Baltimore Orioles,BAL,48726832,88,74,Cal Ripken
+1996,Atlanta Braves,ATL,47390000,96,66,Greg Maddux
+1996,Cleveland Indians,CLE,45317914,99,62,Albert Belle
+1996,Chicago White Sox,CWS,41940000,85,77,Frank Thomas
+1996,Cincinnati Reds,CIN,40719334,81,81,Barry Larkin
+1996,Boston Red Sox,BOS,39676000,85,77,Roger Clemens
+1996,Seattle Mariners,SEA,39221501,85,76,Ken Griffey
+1996,St. Louis Cardinals,STL,38741666,88,74,Danny Jackson
+1996,Texas Rangers,TEX,35862028,90,72,Juan Gonzalez
+1996,Colorado Rockies,COL,34918490,83,79,Bill Swift
+1996,Los Angeles Dodgers,LAD,34647000,90,72,Todd Worrell
+1996,San Francisco Giants,SF,34605225,68,94,Barry Bonds
+1996,Chicago Cubs,CHC,30954000,76,86,Sammy Sosa
+1996,Florida Marlins,MIA,30079500,80,82,Gary Sheffield
+1996,Toronto Blue Jays,TOR,28486708,74,88,Joe Carter
+1996,Philadelphia Phillies,PHI,28393500,67,95,Lenny Dykstra
+1996,San Diego Padres,SD,27133026,91,71,Tony Gwynn
+1996,Houston Astros,HOU,26894000,82,80,Doug Drabek
+1996,California Angels,LAA,26892500,70,91,Mark Langston
+1996,New York Mets,NYM,23456500,71,91,Pete Harnisch
+1996,Minnesota Twins,MIN,21961500,78,84,Chuck Knoblauch
+1996,Detroit Tigers,DET,21941000,53,109,Cecil Fielder
+1996,Pittsburgh Pirates,PIT,21253500,73,89,Jay Bell
+1996,Milwaukee Brewers,MIL,20482000,80,82,Greg Vaughn
+1996,Oakland Athletics,ATH,19404500,78,84,Mark McGwire
+1996,Kansas City Royals,KC,18480750,75,86,Kevin Appier
+1996,Montreal Expos,WSH,15410500,88,74,Moises Alou
+1997,New York Yankees,NYY,59148877,96,66,Cecil Fielder
+1997,Baltimore Orioles,BAL,54871399,98,64,Cal Ripken
+1997,Chicago White Sox,CWS,54377500,80,81,Albert Belle
+1997,Cleveland Indians,CLE,54130232,86,75,Matt Williams
+1997,Atlanta Braves,ATL,50488500,101,61,John Smoltz
+1997,Texas Rangers,TEX,50112268,77,85,Juan Gonzalez
+1997,Florida Marlins,MIA,47753000,92,70,Alex Fernandez
+1997,Toronto Blue Jays,TOR,45894833,76,86,Roger Clemens
+1997,St. Louis Cardinals,STL,44179167,73,89,Andy Benes
+1997,Los Angeles Dodgers,LAD,43400000,88,74,Mike Piazza
+1997,Cincinnati Reds,CIN,43267000,76,86,Ruben Sierra
+1997,Boston Red Sox,BOS,43232000,78,84,Mo Vaughn
+1997,Colorado Rockies,COL,42870501,83,79,Larry Walker
+1997,Chicago Cubs,CHC,39829333,68,94,Sammy Sosa
+1997,Seattle Mariners,SEA,39667628,90,72,Ken Griffey
+1997,New York Mets,NYM,38474567,88,74,John Olerud
+1997,Philadelphia Phillies,PHI,35463500,68,94,Gregg Jefferies
+1997,San Diego Padres,SD,34698672,76,86,Tony Gwynn
+1997,San Francisco Giants,SF,33469213,90,72,Barry Bonds
+1997,Houston Astros,HOU,32935000,84,78,Jeff Bagwell
+1997,Kansas City Royals,KC,31225000,67,94,Jay Bell
+1997,Anaheim Angels,LAA,29452672,84,78,Chuck Finley
+1997,Minnesota Twins,MIN,25747500,68,94,Chuck Knoblauch
+1997,Oakland Athletics,ATH,21911000,65,97,Mark McGwire
+1997,Milwaukee Brewers,MIL,21320332,78,83,Ben McDonald
+1997,Montreal Expos,WSH,18335500,78,84,Pedro Martinez
+1997,Detroit Tigers,DET,16304500,79,83,Travis Fryman
+1997,Pittsburgh Pirates,PIT,9071666,79,83,Al Martin
+1998,Baltimore Orioles,BAL,70408134,79,83,Mike Mussina
+1998,New York Yankees,NYY,63159898,114,48,Bernie Williams
+1998,Atlanta Braves,ATL,59536000,106,56,Greg Maddux
+1998,Cleveland Indians,CLE,59033499,89,73,Kenny Lofton
+1998,Texas Rangers,TEX,54704595,88,74,Juan Gonzalez
+1998,St. Louis Cardinals,STL,52572500,83,79,Mark McGwire
+1998,Seattle Mariners,SEA,52032291,76,85,Ken Griffey
+1998,Boston Red Sox,BOS,51647000,92,70,Pedro Martinez
+1998,New York Mets,NYM,49559665,88,74,Bernard Gilkey
+1998,Chicago Cubs,CHC,49383000,90,73,Sammy Sosa
+1998,Toronto Blue Jays,TOR,48415000,88,74,Roger Clemens
+1998,Los Angeles Dodgers,LAD,47970000,83,79,Mike Piazza
+1998,Colorado Rockies,COL,47433333,77,85,Larry Walker
+1998,San Diego Padres,SD,45368000,98,64,Greg Vaughn
+1998,Houston Astros,HOU,40629000,102,60,Jeff Bagwell
+1998,San Francisco Giants,SF,40320835,89,74,Barry Bonds
+1998,Anaheim Angels,LAA,38537000,85,77,Ken Hill
+1998,Chicago White Sox,CWS,36840000,80,82,Albert Belle
+1998,Philadelphia Phillies,PHI,36085000,75,87,Gregg Jefferies
+1998,Florida Marlins,MIA,33434000,54,108,Gary Sheffield
+1998,Kansas City Royals,KC,32912500,72,89,Dean Palmer
+1998,Milwaukee Brewers,MIL,32252583,74,88,Marquis Grissom
+1998,Arizona Diamondbacks,ARI,29161500,65,97,Andy Benes
+1998,Minnesota Twins,MIN,26182500,70,92,Paul Molitor
+1998,Tampa Bay Devil Rays,TB,25317500,63,99,Fred McGriff
+1998,Detroit Tigers,DET,22625000,65,97,Bobby Higginson
+1998,Cincinnati Reds,CIN,21995000,77,85,Barry Larkin
+1998,Oakland Athletics,ATH,20063000,74,88,Kenny Rogers
+1998,Pittsburgh Pirates,PIT,13752000,69,93,Al Martin
+1998,Montreal Expos,WSH,9202000,65,97,Rondell White
+1999,New York Yankees,NYY,88130709,98,64,Bernie Williams
+1999,Texas Rangers,TEX,81301598,95,67,Ivan Rodriguez
+1999,Atlanta Braves,ATL,75065000,103,59,Greg Maddux
+1999,Cleveland Indians,CLE,73853962,97,65,Jim Thome
+1999,Boston Red Sox,BOS,71720000,94,68,Pedro Martinez
+1999,New York Mets,NYM,71331425,97,66,Mike Piazza
+1999,Los Angeles Dodgers,LAD,71135786,77,85,Kevin Brown
+1999,Baltimore Orioles,BAL,70818363,78,84,Albert Belle
+1999,Arizona Diamondbacks,ARI,70370999,100,62,Randy Johnson
+1999,Chicago Cubs,CHC,55368500,67,95,Sammy Sosa
+1999,Houston Astros,HOU,55289000,97,65,Jeff Bagwell
+1999,Colorado Rockies,COL,54392504,72,90,Darryl Kile
+1999,Anaheim Angels,LAA,49893166,70,92,Mo Vaughn
+1999,Toronto Blue Jays,TOR,48165333,84,78,Pat Hentgen
+1999,St. Louis Cardinals,STL,46248195,75,86,Mark McGwire
+1999,San Francisco Giants,SF,46059557,86,76,Barry Bonds
+1999,San Diego Padres,SD,45932179,74,88,Andy Ashby
+1999,Seattle Mariners,SEA,44371336,79,83,Ken Griffey
+1999,Milwaukee Brewers,MIL,42927395,74,87,Dave Nilsson
+1999,Cincinnati Reds,CIN,42142761,96,67,Greg Vaughn
+1999,Tampa Bay Devil Rays,TB,37812500,69,93,Roberto Hernandez
+1999,Detroit Tigers,DET,34959666,69,92,Dean Palmer
+1999,Philadelphia Phillies,PHI,30516500,77,85,Ron Gant
+1999,Chicago White Sox,CWS,24550000,75,86,Frank Thomas
+1999,Pittsburgh Pirates,PIT,24217666,78,83,Al Martin
+1999,Oakland Athletics,ATH,24150333,87,75,Kenny Rogers
+1999,Kansas City Royals,KC,16527000,64,97,Kevin Appier
+1999,Montreal Expos,WSH,16363000,68,94,Rondell White
+1999,Minnesota Twins,MIN,16355000,63,97,Rick Aguilera
+1999,Florida Marlins,MIA,15150000,64,98,Alex Fernandez
+2000,New York Yankees,NYY,92938260,87,74,Bernie Williams
+2000,Los Angeles Dodgers,LAD,90725953,86,76,Kevin Brown
+2000,Baltimore Orioles,BAL,83141198,74,88,Albert Belle
+2000,Atlanta Braves,ATL,82732500,95,67,Greg Maddux
+2000,Boston Red Sox,BOS,81210333,85,77,Pedro Martinez
+2000,New York Mets,NYM,79759762,94,68,Mike Piazza
+2000,Arizona Diamondbacks,ARI,77880333,85,77,Randy Johnson
+2000,Cleveland Indians,CLE,76508334,90,72,Jim Thome
+2000,Texas Rangers,TEX,70785000,71,91,Rafael Palmeiro
+2000,Tampa Bay Devil Rays,TB,64407910,69,92,Greg Vaughn
+2000,Colorado Rockies,COL,64130857,82,80,Larry Walker
+2000,St. Louis Cardinals,STL,63993023,95,67,Mark McGwire
+2000,Chicago Cubs,CHC,62129333,65,97,Sammy Sosa
+2000,Detroit Tigers,DET,61740167,79,83,Juan Gonzalez
+2000,Seattle Mariners,SEA,59215000,91,71,Aaron Sele
+2000,Anaheim Angels,LAA,55766667,82,80,Mo Vaughn
+2000,San Diego Padres,SD,54971000,76,86,Trevor Hoffman
+2000,San Francisco Giants,SF,53541000,97,65,Barry Bonds
+2000,Houston Astros,HOU,52356667,72,90,Craig Biggio
+2000,Philadelphia Phillies,PHI,46947667,65,97,Andy Ashby
+2000,Toronto Blue Jays,TOR,46363332,83,79,Raul Mondesi
+2000,Cincinnati Reds,CIN,44217500,85,77,Ken Griffey
+2000,Milwaukee Brewers,MIL,35782833,73,89,Jaime Navarro
+2000,Montreal Expos,WSH,33527666,67,95,Hideki Irabu
+2000,Oakland Athletics,ATH,32121833,91,70,Kevin Appier
+2000,Chicago White Sox,CWS,31159000,95,67,Frank Thomas
+2000,Pittsburgh Pirates,PIT,29561667,69,93,Kevin Young
+2000,Kansas City Royals,KC,23132500,77,85,Johnny Damon
+2000,Florida Marlins,MIA,19870000,79,82,Alex Fernandez
+2000,Minnesota Twins,MIN,15654500,69,93,Brad Radke
+2001,New York Yankees,NYY,112287143,95,65,Derek Jeter
+2001,Boston Red Sox,BOS,109675833,82,79,Manny Ramirez
+2001,Los Angeles Dodgers,LAD,109105953,86,76,Kevin Brown
+2001,New York Mets,NYM,93674428,82,80,Mike Piazza
+2001,Cleveland Indians,CLE,92660001,91,71,Juan Gonzalez
+2001,Atlanta Braves,ATL,91936166,88,74,Greg Maddux
+2001,Texas Rangers,TEX,88633500,73,89,Alex Rodriguez
+2001,Arizona Diamondbacks,ARI,85247999,92,70,Randy Johnson
+2001,St. Louis Cardinals,STL,78333333,93,69,Mark McGwire
+2001,Toronto Blue Jays,TOR,76895999,80,82,Carlos Delgado
+2001,Seattle Mariners,SEA,74720834,116,46,Aaron Sele
+2001,Baltimore Orioles,BAL,74279540,63,98,Brady Anderson
+2001,Colorado Rockies,COL,71541334,73,89,Larry Walker
+2001,Chicago White Sox,CWS,65628667,83,79,Frank Thomas
+2001,Chicago Cubs,CHC,64515833,88,74,Sammy Sosa
+2001,San Francisco Giants,SF,63280167,90,72,Barry Bonds
+2001,Houston Astros,HOU,60387667,93,69,Craig Biggio
+2001,Pittsburgh Pirates,PIT,57760833,62,100,Brian Giles
+2001,Tampa Bay Devil Rays,TB,56980000,62,100,Greg Vaughn
+2001,Detroit Tigers,DET,49356167,66,96,Dean Palmer
+2001,Cincinnati Reds,CIN,48784000,66,96,Ken Griffey
+2001,Anaheim Angels,LAA,47735168,75,87,Tim Salmon
+2001,Milwaukee Brewers,MIL,45099333,68,94,Jeff Hammonds
+2001,Philadelphia Phillies,PHI,41663833,86,76,Mike Lieberthal
+2001,San Diego Padres,SD,38882833,79,83,Trevor Hoffman
+2001,Florida Marlins,MIA,35562500,76,86,Cliff Floyd
+2001,Kansas City Royals,KC,35422500,65,97,Roberto Hernandez
+2001,Montreal Expos,WSH,34849500,68,94,Vladimir Guerrero
+2001,Oakland Athletics,ATH,33810750,102,60,Johnny Damon
+2001,Minnesota Twins,MIN,24130000,85,77,Brad Radke
+2002,New York Yankees,NYY,125928583,103,58,Derek Jeter
+2002,Boston Red Sox,BOS,108366060,93,69,Manny Ramirez
+2002,Texas Rangers,TEX,105726122,72,90,Alex Rodriguez
+2002,Arizona Diamondbacks,ARI,102819999,98,64,Randy Johnson
+2002,Los Angeles Dodgers,LAD,94850953,92,70,Kevin Brown
+2002,New York Mets,NYM,94633593,75,86,Mo Vaughn
+2002,Atlanta Braves,ATL,93470367,101,59,Greg Maddux
+2002,Seattle Mariners,SEA,80282668,93,69,Bret Boone
+2002,Cleveland Indians,CLE,78909449,74,88,Jim Thome
+2002,San Francisco Giants,SF,78299835,95,66,Barry Bonds
+2002,Toronto Blue Jays,TOR,76864333,78,84,Carlos Delgado
+2002,Chicago Cubs,CHC,75690833,67,95,Sammy Sosa
+2002,St. Louis Cardinals,STL,74660875,97,65,Jim Edmonds
+2002,Houston Astros,HOU,63448417,84,78,Jeff Bagwell
+2002,Anaheim Angels,LAA,61721667,99,63,Tim Salmon
+2002,Baltimore Orioles,BAL,60493487,67,95,David Segui
+2002,Philadelphia Phillies,PHI,57957999,80,81,Scott Rolen
+2002,Chicago White Sox,CWS,57052833,81,81,Frank Thomas
+2002,Colorado Rockies,COL,56851043,73,89,Larry Walker
+2002,Detroit Tigers,DET,55048000,55,106,Dean Palmer
+2002,Milwaukee Brewers,MIL,50287833,56,106,Jeff Hammonds
+2002,Kansas City Royals,KC,47257000,62,100,Mike Sweeney
+2002,Cincinnati Reds,CIN,45050390,78,84,Barry Larkin
+2002,Pittsburgh Pirates,PIT,42323599,72,89,Brian Giles
+2002,Florida Marlins,MIA,41979917,79,83,Cliff Floyd
+2002,San Diego Padres,SD,41425000,66,96,Ray Lankford
+2002,Minnesota Twins,MIN,40225000,94,67,Brad Radke
+2002,Oakland Athletics,ATH,40004167,103,59,Jermaine Dye
+2002,Montreal Expos,WSH,38670500,83,79,Vladimir Guerrero
+2002,Tampa Bay Devil Rays,TB,34380000,55,106,Greg Vaughn
+2003,New York Yankees,NYY,152749814,101,61,Derek Jeter
+2003,New York Mets,NYM,117176429,66,95,Mo Vaughn
+2003,Atlanta Braves,ATL,106243667,101,61,Greg Maddux
+2003,Los Angeles Dodgers,LAD,105872620,85,77,Kevin Brown
+2003,Texas Rangers,TEX,103491667,71,91,Alex Rodriguez
+2003,Boston Red Sox,BOS,99946500,95,67,Manny Ramirez
+2003,Seattle Mariners,SEA,86959167,93,69,Kazuhiro Sasaki
+2003,St. Louis Cardinals,STL,83486666,85,77,Matt Morris
+2003,San Francisco Giants,SF,82852167,100,61,Barry Bonds
+2003,Arizona Diamondbacks,ARI,80640333,84,78,Randy Johnson
+2003,Chicago Cubs,CHC,79868333,88,74,Sammy Sosa
+2003,Anaheim Angels,LAA,79031667,77,85,Kevin Appier
+2003,Baltimore Orioles,BAL,73877500,71,91,David Segui
+2003,Houston Astros,HOU,71040000,87,75,Jeff Bagwell
+2003,Philadelphia Phillies,PHI,70780000,86,76,Jim Thome
+2003,Colorado Rockies,COL,67179667,74,88,Larry Walker
+2003,Cincinnati Reds,CIN,59355667,69,93,Ken Griffey
+2003,Minnesota Twins,MIN,55505000,90,72,Brad Radke
+2003,Pittsburgh Pirates,PIT,54812429,75,87,Jason Kendall
+2003,Montreal Expos,WSH,51948500,83,79,Vladimir Guerrero
+2003,Toronto Blue Jays,TOR,51269000,86,76,Carlos Delgado
+2003,Chicago White Sox,CWS,51010000,86,76,Magglio Ordonez
+2003,Oakland Athletics,ATH,50260834,96,66,Jermaine Dye
+2003,Detroit Tigers,DET,49168000,43,119,Bobby Higginson
+2003,Florida Marlins,MIA,49050000,91,71,Ivan Rodriguez
+2003,San Diego Padres,SD,47928000,64,98,Trevor Hoffman
+2003,Cleveland Indians,CLE,45584834,68,94,Ellis Burks
+2003,Milwaukee Brewers,MIL,40627000,68,94,Jeff Hammonds
+2003,Kansas City Royals,KC,40518000,83,79,Carlos Beltran
+2003,Tampa Bay Devil Rays,TB,19630000,63,99,Rey Ordonez
+2004,New York Yankees,NYY,184193950,101,61,Alex Rodriguez
+2004,Boston Red Sox,BOS,127298500,98,64,Manny Ramirez
+2004,Anaheim Angels,LAA,100534667,92,70,Vladimir Guerrero
+2004,New York Mets,NYM,96660970,71,91,Mike Piazza
+2004,Philadelphia Phillies,PHI,93219167,86,76,Jim Thome
+2004,Los Angeles Dodgers,LAD,92902001,93,69,Shawn Green
+2004,Chicago Cubs,CHC,90560000,89,73,Sammy Sosa
+2004,Atlanta Braves,ATL,90182500,96,66,Chipper Jones
+2004,St. Louis Cardinals,STL,83228333,105,57,Matt Morris
+2004,San Francisco Giants,SF,82019166,91,71,Barry Bonds
+2004,Seattle Mariners,SEA,81515834,63,99,Bret Boone
+2004,Houston Astros,HOU,75397000,92,70,Jeff Bagwell
+2004,Arizona Diamondbacks,ARI,69780750,51,111,Randy Johnson
+2004,Colorado Rockies,COL,65445167,68,94,Larry Walker
+2004,Chicago White Sox,CWS,65212500,83,79,Magglio Ordonez
+2004,Oakland Athletics,ATH,59425667,91,71,Jermaine Dye
+2004,San Diego Padres,SD,55384833,87,75,Brian Giles
+2004,Texas Rangers,TEX,55050417,89,73,Chan Ho Park
+2004,Minnesota Twins,MIN,53585000,92,70,Brad Radke
+2004,Baltimore Orioles,BAL,51623333,78,84,David Segui
+2004,Toronto Blue Jays,TOR,50017000,67,94,Carlos Delgado
+2004,Kansas City Royals,KC,47609000,58,104,Mike Sweeney
+2004,Detroit Tigers,DET,46832000,72,90,Bobby Higginson
+2004,Cincinnati Reds,CIN,46615250,76,86,Ken Griffey
+2004,Florida Marlins,MIA,42143042,83,79,Mike Lowell
+2004,Montreal Expos,WSH,41197500,67,95,Jose Vidro
+2004,Cleveland Indians,CLE,34319300,80,82,Matt Lawton
+2004,Pittsburgh Pirates,PIT,32227929,72,89,Jason Kendall
+2004,Tampa Bay Devil Rays,TB,29556667,70,91,Tino Martinez
+2004,Milwaukee Brewers,MIL,27528500,67,94,Geoff Jenkins
+2005,New York Yankees,NYY,208306817,95,67,Alex Rodriguez
+2005,Boston Red Sox,BOS,123505125,95,67,Manny Ramirez
+2005,New York Mets,NYM,101305821,83,79,Mike Piazza
+2005,Los Angeles Angels of Anaheim,LAA,97725322,95,67,Vladimir Guerrero
+2005,Philadelphia Phillies,PHI,95522000,88,74,Jim Thome
+2005,St. Louis Cardinals,STL,92106833,100,62,Larry Walker
+2005,San Francisco Giants,SF,90199500,75,87,Barry Bonds
+2005,Seattle Mariners,SEA,87754334,69,93,Ichiro Suzuki
+2005,Chicago Cubs,CHC,87032933,79,83,Kerry Wood
+2005,Atlanta Braves,ATL,86457302,90,72,Chipper Jones
+2005,Los Angeles Dodgers,LAD,83039000,71,91,JD Drew
+2005,Houston Astros,HOU,76779000,89,73,Jeff Bagwell
+2005,Chicago White Sox,CWS,75178000,99,63,Paul Konerko
+2005,Baltimore Orioles,BAL,73914333,74,88,Sammy Sosa
+2005,Detroit Tigers,DET,69092000,71,91,Bobby Higginson
+2005,San Diego Padres,SD,63290833,82,80,Phil Nevin
+2005,Arizona Diamondbacks,ARI,62329166,77,85,Javier Vazquez
+2005,Cincinnati Reds,CIN,61892583,73,89,Ken Griffey
+2005,Florida Marlins,MIA,60408834,83,79,Mike Lowell
+2005,Minnesota Twins,MIN,56186000,83,79,Brad Radke
+2005,Texas Rangers,TEX,55849000,79,83,Chan Ho Park
+2005,Oakland Athletics,ATH,55425762,88,74,Jason Kendall
+2005,Washington Nationals,WSH,48581500,81,81,Livan Hernandez
+2005,Colorado Rockies,COL,48155000,67,95,Todd Helton
+2005,Toronto Blue Jays,TOR,45719500,80,82,Roy Halladay
+2005,Cleveland Indians,CLE,41502500,93,69,Kevin Millwood
+2005,Milwaukee Brewers,MIL,39934833,81,81,Carlos Lee
+2005,Pittsburgh Pirates,PIT,38133000,67,95,Matt Lawton
+2005,Kansas City Royals,KC,36881000,56,106,Mike Sweeney
+2005,Tampa Bay Devil Rays,TB,29679067,67,95,Aubrey Huff
+2006,New York Yankees,NYY,194663079,97,65,Alex Rodriguez
+2006,Boston Red Sox,BOS,120099824,86,76,Manny Ramirez
+2006,Los Angeles Angels,LAA,103472000,89,73,Bartolo Colon
+2006,Chicago White Sox,CWS,102750667,90,72,Jim Thome
+2006,New York Mets,NYM,101084963,97,65,Pedro Martinez
+2006,Los Angeles Dodgers,LAD,98447187,88,74,JD Drew
+2006,Chicago Cubs,CHC,94424499,66,96,Kerry Wood
+2006,Houston Astros,HOU,92551503,82,80,Andy Pettitte
+2006,Atlanta Braves,ATL,90156876,79,83,Andruw Jones
+2006,San Francisco Giants,SF,90056419,76,85,Barry Bonds
+2006,St. Louis Cardinals,STL,88891371,83,78,Albert Pujols
+2006,Philadelphia Phillies,PHI,88273333,85,77,Bobby Abreu
+2006,Seattle Mariners,SEA,87959833,78,84,Richie Sexson
+2006,Detroit Tigers,DET,82612866,95,67,Magglio Ordonez
+2006,Baltimore Orioles,BAL,72585582,70,92,Miguel Tejada
+2006,Toronto Blue Jays,TOR,71915000,87,75,Roy Halladay
+2006,San Diego Padres,SD,69896141,88,74,Chan Ho Park
+2006,Texas Rangers,TEX,68228662,80,82,Phil Nevin
+2006,Minnesota Twins,MIN,63396006,96,66,Torii Hunter
+2006,Washington Nationals,WSH,63143000,71,91,Alfonso Soriano
+2006,Oakland Athletics,ATH,62243079,93,69,Jason Kendall
+2006,Cincinnati Reds,CIN,60909519,80,82,Ken Griffey
+2006,Arizona Diamondbacks,ARI,59684226,76,86,Luis Gonzalez
+2006,Milwaukee Brewers,MIL,57568333,75,87,Ben Sheets
+2006,Cleveland Indians,CLE,56031500,78,84,CC Sabathia
+2006,Kansas City Royals,KC,47294000,62,100,Mike Sweeney
+2006,Pittsburgh Pirates,PIT,46717750,67,95,Sean Casey
+2006,Colorado Rockies,COL,41233000,76,86,Todd Helton
+2006,Tampa Bay Devil Rays,TB,35417967,61,101,Aubrey Huff
+2006,Florida Marlins,MIA,14998500,78,84,Dontrelle Willis
+2007,New York Yankees,NYY,189259045,94,68,Jason Giambi
+2007,Boston Red Sox,BOS,143026214,96,66,Manny Ramirez
+2007,New York Mets,NYM,115231663,88,74,Carlos Delgado
+2007,Los Angeles Angels,LAA,109251333,94,68,Bartolo Colon
+2007,Chicago White Sox,CWS,108671833,72,90,Jim Thome
+2007,Los Angeles Dodgers,LAD,108454524,82,80,Jason Schmidt
+2007,Seattle Mariners,SEA,106460833,88,74,Richie Sexson
+2007,Chicago Cubs,CHC,99670332,85,77,Derrek Lee
+2007,Detroit Tigers,DET,94800369,88,74,Magglio Ordonez
+2007,Baltimore Orioles,BAL,93174808,69,93,Miguel Tejada
+2007,St. Louis Cardinals,STL,90286823,78,84,Albert Pujols
+2007,San Francisco Giants,SF,90219056,71,91,Barry Bonds
+2007,Philadelphia Phillies,PHI,89428213,89,73,Pat Burrell
+2007,Houston Astros,HOU,87759000,73,89,Lance Berkman
+2007,Atlanta Braves,ATL,87290833,84,78,Andruw Jones
+2007,Toronto Blue Jays,TOR,81942800,83,79,AJ Burnett
+2007,Oakland Athletics,ATH,79366940,76,86,Jason Kendall
+2007,Minnesota Twins,MIN,71439500,79,83,Johan Santana
+2007,Milwaukee Brewers,MIL,70986500,83,79,Ben Sheets
+2007,Cincinnati Reds,CIN,68524980,72,90,Adam Dunn
+2007,Texas Rangers,TEX,68318675,75,87,Kevin Millwood
+2007,Kansas City Royals,KC,67116500,69,93,Mike Sweeney
+2007,Cleveland Indians,CLE,61673267,96,66,CC Sabathia
+2007,San Diego Padres,SD,58110567,89,74,Greg Maddux
+2007,Colorado Rockies,COL,54041000,90,73,Todd Helton
+2007,Arizona Diamondbacks,ARI,52067546,90,72,Randy Johnson
+2007,Pittsburgh Pirates,PIT,38537833,68,94,Jack Wilson
+2007,Washington Nationals,WSH,36947500,73,89,Cristian Guzman
+2007,Florida Marlins,MIA,30507000,71,91,Miguel Cabrera
+2007,Tampa Bay Devil Rays,TB,24123500,66,96,Carl Crawford
+2008,New York Yankees,NYY,209081577,89,73,Alex Rodriguez
+2008,New York Mets,NYM,137793376,89,73,Carlos Beltran
+2008,Detroit Tigers,DET,137685196,74,88,Magglio Ordonez
+2008,Boston Red Sox,BOS,133390035,95,67,Manny Ramirez
+2008,Chicago White Sox,CWS,121189332,89,74,Jim Thome
+2008,Los Angeles Angels,LAA,119216333,100,62,Torii Hunter
+2008,Los Angeles Dodgers,LAD,118588536,84,78,Rafael Furcal
+2008,Chicago Cubs,CHC,118345833,97,64,Carlos Zambrano
+2008,Seattle Mariners,SEA,117666482,61,101,Ichiro Suzuki
+2008,Atlanta Braves,ATL,102365683,72,90,Mike Hampton
+2008,St. Louis Cardinals,STL,99624449,86,76,Albert Pujols
+2008,Philadelphia Phillies,PHI,98269880,92,70,Pat Burrell
+2008,Toronto Blue Jays,TOR,97793900,86,76,AJ Burnett
+2008,Houston Astros,HOU,88930414,86,75,Miguel Tejada
+2008,Milwaukee Brewers,MIL,80937499,90,72,Ben Sheets
+2008,Cleveland Indians,CLE,78970066,81,81,CC Sabathia
+2008,San Francisco Giants,SF,76594500,72,90,Barry Zito
+2008,Cincinnati Reds,CIN,74117695,74,88,Adam Dunn
+2008,San Diego Padres,SD,73677616,63,99,Greg Maddux
+2008,Colorado Rockies,COL,68655500,74,88,Todd Helton
+2008,Texas Rangers,TEX,67712326,79,83,Vicente Padilla
+2008,Baltimore Orioles,BAL,67196246,68,93,Aubrey Huff
+2008,Arizona Diamondbacks,ARI,66202712,82,80,Randy Johnson
+2008,Kansas City Royals,KC,58245500,75,87,Jose Guillen
+2008,Minnesota Twins,MIN,56932766,88,75,Justin Morneau
+2008,Washington Nationals,WSH,54961000,59,102,Chad Cordero
+2008,Pittsburgh Pirates,PIT,48689783,67,95,Matt Morris
+2008,Oakland Athletics,ATH,47967126,75,86,Eric Chavez
+2008,Tampa Bay Rays,TB,43820597,97,65,Carlos Pena
+2008,Florida Marlins,MIA,21811500,84,77,Chris Capuano
+2009,New York Yankees,NYY,201449189,103,59,Alex Rodriguez
+2009,New York Mets,NYM,149373987,70,92,Carlos Beltran
+2009,Chicago Cubs,CHC,134809000,83,78,Carlos Zambrano
+2009,Boston Red Sox,BOS,121745999,95,67,JD Drew
+2009,Detroit Tigers,DET,115085145,86,77,Magglio Ordonez
+2009,Los Angeles Angels,LAA,113709000,97,65,Torii Hunter
+2009,Philadelphia Phillies,PHI,113004046,93,69,Ryan Howard
+2009,Houston Astros,HOU,102996414,74,88,Carlos Lee
+2009,Los Angeles Dodgers,LAD,100414592,95,67,Manny Ramirez
+2009,Seattle Mariners,SEA,98904166,85,77,Ichiro Suzuki
+2009,Atlanta Braves,ATL,96726166,86,76,Tim Hudson
+2009,Chicago White Sox,CWS,96068500,79,83,Mark Buehrle
+2009,San Francisco Giants,SF,82616450,88,74,Barry Zito
+2009,Cleveland Indians,CLE,81579166,65,97,Travis Hafner
+2009,Toronto Blue Jays,TOR,80538300,75,87,Roy Halladay
+2009,Milwaukee Brewers,MIL,80182502,80,82,Jeff Suppan
+2009,St. Louis Cardinals,STL,77605109,91,71,Albert Pujols
+2009,Colorado Rockies,COL,75201000,92,70,Todd Helton
+2009,Cincinnati Reds,CIN,73558500,78,84,Aaron Harang
+2009,Arizona Diamondbacks,ARI,73516666,70,92,Eric Byrnes
+2009,Kansas City Royals,KC,70519333,65,97,Jose Guillen
+2009,Texas Rangers,TEX,68178798,87,75,Michael Young
+2009,Baltimore Orioles,BAL,67101666,64,98,Melvin Mora
+2009,Minnesota Twins,MIN,65299266,87,76,Justin Morneau
+2009,Tampa Bay Rays,TB,63313034,84,78,Carl Crawford
+2009,Oakland Athletics,ATH,62310000,75,87,Matt Holliday
+2009,Washington Nationals,WSH,60328000,59,103,Adam Dunn
+2009,Pittsburgh Pirates,PIT,48693000,62,99,Jack Wilson
+2009,San Diego Padres,SD,43734200,75,87,Jake Peavy
+2009,Florida Marlins,MIA,36834000,87,75,Hanley Ramirez
+2010,New York Yankees,NYY,206333389,95,67,Alex Rodriguez
+2010,Boston Red Sox,BOS,162747333,89,73,John Lackey
+2010,Chicago Cubs,CHC,146859000,75,87,Alfonso Soriano
+2010,Philadelphia Phillies,PHI,141927381,97,65,Ryan Howard
+2010,New York Mets,NYM,132701445,79,83,Johan Santana
+2010,Detroit Tigers,DET,122864929,81,81,Miguel Cabrera
+2010,Chicago White Sox,CWS,108273197,88,74,Jake Peavy
+2010,Los Angeles Angels,LAA,105013667,80,82,Torii Hunter
+2010,Seattle Mariners,SEA,98376667,61,101,Ichiro Suzuki
+2010,San Francisco Giants,SF,97828833,92,70,Barry Zito
+2010,Minnesota Twins,MIN,97559167,94,68,Justin Morneau
+2010,Los Angeles Dodgers,LAD,94945517,80,82,Manny Ramirez
+2010,St. Louis Cardinals,STL,93540753,86,76,Matt Holliday
+2010,Houston Astros,HOU,92355500,76,86,Carlos Lee
+2010,Atlanta Braves,ATL,84423667,91,71,Derek Lowe
+2010,Colorado Rockies,COL,84227000,83,79,Todd Helton
+2010,Baltimore Orioles,BAL,81612500,66,96,Kevin Millwood
+2010,Milwaukee Brewers,MIL,81108279,77,85,Jeff Suppan
+2010,Cincinnati Reds,CIN,72386544,91,71,Aaron Harang
+2010,Kansas City Royals,KC,72267710,67,95,Gil Meche
+2010,Tampa Bay Rays,TB,71923471,96,66,Carlos Pena
+2010,Toronto Blue Jays,TOR,62689357,85,77,Vernon Wells
+2010,Washington Nationals,WSH,61425000,69,93,Adam Dunn
+2010,Cleveland Indians,CLE,61203967,69,93,Travis Hafner
+2010,Arizona Diamondbacks,ARI,60718167,65,97,Dan Haren
+2010,Florida Marlins,MIA,55641500,80,82,Nate Robertson
+2010,Texas Rangers,TEX,55250545,90,72,Michael Young
+2010,Oakland Athletics,ATH,51654900,81,81,Eric Chavez
+2010,San Diego Padres,SD,37799300,90,72,Chris Young
+2010,Pittsburgh Pirates,PIT,34943000,57,105,Paul Maholm
+2011,New York Yankees,NYY,202689028,97,65,Alex Rodriguez
+2011,Philadelphia Phillies,PHI,172976379,102,60,Ryan Howard
+2011,Boston Red Sox,BOS,161762475,90,72,Josh Beckett
+2011,Los Angeles Angels,LAA,138543166,86,76,Vernon Wells
+2011,Chicago White Sox,CWS,127789000,79,83,Jake Peavy
+2011,Chicago Cubs,CHC,125047329,71,91,Alfonso Soriano
+2011,New York Mets,NYM,118847309,77,85,Carlos Beltran
+2011,San Francisco Giants,SF,118198333,86,76,Barry Zito
+2011,Minnesota Twins,MIN,112737000,63,99,Joe Mauer
+2011,Detroit Tigers,DET,105700231,95,67,Miguel Cabrera
+2011,St. Louis Cardinals,STL,105433572,90,72,Matt Holliday
+2011,Los Angeles Dodgers,LAD,104188999,82,79,Rafael Furcal
+2011,Texas Rangers,TEX,92299264,96,66,Michael Young
+2011,Colorado Rockies,COL,88148071,73,89,Todd Helton
+2011,Atlanta Braves,ATL,87002692,89,73,Derek Lowe
+2011,Seattle Mariners,SEA,86524600,67,95,Ichiro Suzuki
+2011,Milwaukee Brewers,MIL,85497333,96,66,Prince Fielder
+2011,Baltimore Orioles,BAL,85304038,69,93,Nick Markakis
+2011,Cincinnati Reds,CIN,75947134,79,83,Francisco Cordero
+2011,Houston Astros,HOU,70694000,56,106,Carlos Lee
+2011,Oakland Athletics,ATH,66536500,74,88,David DeJesus
+2011,Washington Nationals,WSH,63856928,80,81,Jayson Werth
+2011,Toronto Blue Jays,TOR,62567800,81,81,Jose Bautista
+2011,Florida Marlins,MIA,56944000,72,90,Hanley Ramirez
+2011,Arizona Diamondbacks,ARI,53639833,94,68,Kelly Johnson
+2011,Cleveland Indians,CLE,49190566,80,82,Travis Hafner
+2011,San Diego Padres,SD,45869140,71,91,Heath Bell
+2011,Pittsburgh Pirates,PIT,45047000,72,90,Paul Maholm
+2011,Tampa Bay Rays,TB,41053571,91,71,Johnny Damon
+2011,Kansas City Royals,KC,36126000,71,91,Joakim Soria
+2012,New York Yankees,NYY,197962289,95,67,Alex Rodriguez
+2012,Philadelphia Phillies,PHI,174538938,81,81,Cliff Lee
+2012,Boston Red Sox,BOS,173186617,69,93,Adrian Gonzalez
+2012,Los Angeles Angels,LAA,154485166,89,73,Vernon Wells
+2012,Detroit Tigers,DET,132300000,88,74,Prince Fielder
+2012,Texas Rangers,TEX,120510974,93,69,Michael Young
+2012,Miami Marlins,MIA,118078000,69,93,Carlos Zambrano
+2012,Seattle Mariners,SEA,117620683,75,87,Felix Hernandez
+2012,St. Louis Cardinals,STL,110300862,88,74,Matt Holliday
+2012,Milwaukee Brewers,MIL,97653944,83,79,Zack Greinke
+2012,Chicago White Sox,CWS,96919500,85,77,Jake Peavy
+2012,Los Angeles Dodgers,LAD,95143575,86,76,Ted Lilly
+2012,Minnesota Twins,MIN,94085000,66,96,Joe Mauer
+2012,New York Mets,NYM,93353983,74,88,Johan Santana
+2012,Chicago Cubs,CHC,88197033,61,101,Alfonso Soriano
+2012,Atlanta Braves,ATL,83309942,94,68,Chipper Jones
+2012,Cincinnati Reds,CIN,82203616,97,65,Brandon Phillips
+2012,San Francisco Giants,SF,81978100,94,68,Barry Zito
+2012,Baltimore Orioles,BAL,81428999,93,69,Nick Markakis
+2012,Washington Nationals,WSH,81336143,98,64,Jayson Werth
+2012,Cleveland Indians,CLE,78430300,68,94,Derek Lowe
+2012,Colorado Rockies,COL,78069571,64,98,Michael Cuddyer
+2012,Toronto Blue Jays,TOR,75489200,73,89,Jose Bautista
+2012,Arizona Diamondbacks,ARI,74284833,81,81,Stephen Drew
+2012,Tampa Bay Rays,TB,64173500,90,72,James Shields
+2012,Pittsburgh Pirates,PIT,63431999,79,83,AJ Burnett
+2012,Kansas City Royals,KC,60916225,72,90,Billy Butler
+2012,Houston Astros,HOU,60651000,55,107,Carlos Lee
+2012,Oakland Athletics,ATH,55372500,94,68,Yoenis Cespedes
+2012,San Diego Padres,SD,55244700,76,86,Huston Street
+2013,New York Yankees,NYY,228995945,85,77,Alex Rodriguez
+2013,Los Angeles Dodgers,LAD,216302909,92,70,Adrian Gonzalez
+2013,Philadelphia Phillies,PHI,159578214,73,89,Cliff Lee
+2013,Boston Red Sox,BOS,158967286,97,65,John Lackey
+2013,Detroit Tigers,DET,149046844,93,69,Prince Fielder
+2013,San Francisco Giants,SF,142180333,76,86,Tim Lincecum
+2013,Los Angeles Angels,LAA,142165250,78,84,Josh Hamilton
+2013,Texas Rangers,TEX,127197575,91,72,Adrian Beltre
+2013,Chicago White Sox,CWS,124065277,63,99,Jake Peavy
+2013,Toronto Blue Jays,TOR,118244039,74,88,Jose Bautista
+2013,St. Louis Cardinals,STL,116702085,97,65,Matt Holliday
+2013,Washington Nationals,WSH,112431770,86,76,Jayson Werth
+2013,Cincinnati Reds,CIN,110565728,90,72,Joey Votto
+2013,Chicago Cubs,CHC,104150726,66,96,Alfonso Soriano
+2013,Baltimore Orioles,BAL,91793333,85,77,Nick Markakis
+2013,Milwaukee Brewers,MIL,91003366,74,88,Rickie Weeks
+2013,Arizona Diamondbacks,ARI,90158500,81,81,Miguel Montero
+2013,Atlanta Braves,ATL,89288193,96,66,Dan Uggla
+2013,New York Mets,NYM,88877033,74,88,David Wright
+2013,Seattle Mariners,SEA,84295952,71,91,Felix Hernandez
+2013,Cleveland Indians,CLE,82517300,92,70,Nick Swisher
+2013,Kansas City Royals,KC,80491725,86,76,Ervin Santana
+2013,Minnesota Twins,MIN,75562500,66,96,Joe Mauer
+2013,Colorado Rockies,COL,75449071,74,88,Jorge De La Rosa
+2013,San Diego Padres,SD,71689900,76,86,Carlos Quentin
+2013,Oakland Athletics,ATH,68577000,96,66,Chris Young
+2013,Pittsburgh Pirates,PIT,66289524,94,68,AJ Burnett
+2013,Tampa Bay Rays,TB,57030272,92,71,David Price
+2013,Miami Marlins,MIA,39621900,62,100,Ricky Nolasco
+2013,Houston Astros,HOU,24328538,51,111,Bud Norris
+2014,Los Angeles Dodgers,LAD,235295219,94,68,Zack Greinke
+2014,New York Yankees,NYY,203812506,84,78,CC Sabathia
+2014,Philadelphia Phillies,PHI,180052723,73,89,Ryan Howard
+2014,Boston Red Sox,BOS,162817411,71,91,Jake Peavy
+2014,Detroit Tigers,DET,162228527,90,72,Miguel Cabrera
+2014,Los Angeles Angels,LAA,155692000,98,64,Albert Pujols
+2014,San Francisco Giants,SF,154185878,88,74,Matt Cain
+2014,Texas Rangers,TEX,136036172,67,95,Prince Fielder
+2014,Washington Nationals,WSH,134704437,96,66,Jayson Werth
+2014,Toronto Blue Jays,TOR,132628700,83,79,Mark Buehrle
+2014,Arizona Diamondbacks,ARI,112688666,64,98,Martin Prado
+2014,Cincinnati Reds,CIN,112390772,76,86,Joey Votto
+2014,St. Louis Cardinals,STL,111020360,90,72,Adam Wainwright
+2014,Atlanta Braves,ATL,110897341,79,83,Justin Upton
+2014,Baltimore Orioles,BAL,107406623,96,66,Adam Jones
+2014,Milwaukee Brewers,MIL,103844806,82,80,Aramis Ramirez
+2014,Colorado Rockies,COL,95832071,66,96,Troy Tulowitzki
+2014,Seattle Mariners,SEA,92081943,87,75,Robinson Cano
+2014,Kansas City Royals,KC,92034345,89,73,James Shields
+2014,Chicago White Sox,CWS,91159254,73,89,John Danks
+2014,San Diego Padres,SD,90094196,77,85,Chase Headley
+2014,New York Mets,NYM,89051758,79,83,David Wright
+2014,Chicago Cubs,CHC,89007857,73,89,Edwin Jackson
+2014,Minnesota Twins,MIN,85776500,70,92,Joe Mauer
+2014,Oakland Athletics,ATH,83401400,88,74,Yoenis Cespedes
+2014,Cleveland Indians,CLE,82534800,85,77,Nick Swisher
+2014,Pittsburgh Pirates,PIT,78111667,88,74,Wandy Rodriguez
+2014,Tampa Bay Rays,TB,77062891,77,85,David Price
+2014,Miami Marlins,MIA,47565400,77,85,Giancarlo Stanton
+2014,Houston Astros,HOU,44544174,70,92,Scott Feldman
+2015,Los Angeles Dodgers,LAD,230352402,92,70,Clayton Kershaw
+2015,New York Yankees,NYY,213472857,87,75,Mark Teixeira
+2015,Washington Nationals,WSH,174510977,83,79,Jayson Werth
+2015,Detroit Tigers,DET,172792250,74,87,Justin Verlander
+2015,Boston Red Sox,BOS,168691914,78,84,Hanley Ramirez
+2015,San Francisco Giants,SF,166495942,84,78,Matt Cain
+2015,Los Angeles Angels,LAA,146449583,85,77,Albert Pujols
+2015,Texas Rangers,TEX,144816873,88,74,Josh Hamilton
+2015,Philadelphia Phillies,PHI,133048000,63,99,Ryan Howard
+2015,San Diego Padres,SD,126619628,74,88,Matt Kemp
+2015,Seattle Mariners,SEA,123225842,76,86,Felix Hernandez
+2015,St. Louis Cardinals,STL,120301957,100,62,Adam Wainwright
+2015,Baltimore Orioles,BAL,118862632,81,81,Adam Jones
+2015,Cincinnati Reds,CIN,117732284,64,98,Joey Votto
+2015,Chicago Cubs,CHC,117164522,97,65,Jon Lester
+2015,Toronto Blue Jays,TOR,116415800,93,69,Jose Reyes
+2015,Kansas City Royals,KC,112914525,95,67,Alex Gordon
+2015,Chicago White Sox,CWS,110712866,76,86,John Danks
+2015,Minnesota Twins,MIN,108262000,83,79,Joe Mauer
+2015,New York Mets,NYM,100133953,90,72,David Wright
+2015,Milwaukee Brewers,MIL,98683035,68,94,Aramis Ramirez
+2015,Colorado Rockies,COL,98261171,68,94,Troy Tulowitzki
+2015,Atlanta Braves,ATL,89622648,67,95,Trevor Cahill
+2015,Cleveland Indians,CLE,87746766,81,80,Nick Swisher
+2015,Pittsburgh Pirates,PIT,85885832,98,64,Francisco Liriano
+2015,Miami Marlins,MIA,84637500,71,91,Martin Prado
+2015,Oakland Athletics,ATH,80786666,68,94,Scott Kazmir
+2015,Tampa Bay Rays,TB,74849584,80,82,Evan Longoria
+2015,Houston Astros,HOU,69064200,86,76,Scott Feldman
+2015,Arizona Diamondbacks,ARI,65770333,79,83,Aaron Hill
+2016,Los Angeles Dodgers,LAD,253639162,91,71,Clayton Kershaw
+2016,New York Yankees,NYY,227854349,84,78,CC Sabathia
+2016,Boston Red Sox,BOS,199864178,93,69,David Price
+2016,Detroit Tigers,DET,199525500,86,75,Justin Verlander
+2016,San Francisco Giants,SF,171464943,87,75,Matt Cain
+2016,Chicago Cubs,CHC,167444167,103,58,Jon Lester
+2016,Los Angeles Angels,LAA,166831190,74,88,Albert Pujols
+2016,Texas Rangers,TEX,161246720,95,67,Prince Fielder
+2016,St. Louis Cardinals,STL,149186000,86,76,Adam Wainwright
+2016,Baltimore Orioles,BAL,147943713,89,73,Chris Davis
+2016,Washington Nationals,WSH,146686385,95,67,Jayson Werth
+2016,Seattle Mariners,SEA,144996858,86,76,Felix Hernandez
+2016,Toronto Blue Jays,TOR,140582027,89,73,Troy Tulowitzki
+2016,Kansas City Royals,KC,137606125,81,81,Alex Gordon
+2016,New York Mets,NYM,130612115,87,75,David Wright
+2016,Chicago White Sox,CWS,115998667,78,84,John Danks
+2016,Colorado Rockies,COL,113242571,75,87,Carlos Gonzalez
+2016,Minnesota Twins,MIN,104591200,59,103,Joe Mauer
+2016,Philadelphia Phillies,PHI,103346668,71,91,Ryan Howard
+2016,San Diego Padres,SD,100547000,68,94,Matt Kemp
+2016,Pittsburgh Pirates,PIT,99960499,78,83,Francisco Liriano
+2016,Arizona Diamondbacks,ARI,98657436,69,93,Zack Greinke
+2016,Cleveland Indians,CLE,98006899,94,67,Carlos Santana
+2016,Houston Astros,HOU,96643000,84,78,Colby Rasmus
+2016,Cincinnati Reds,CIN,93171452,68,94,Joey Votto
+2016,Oakland Athletics,ATH,85823390,69,93,Coco Crisp
+2016,Atlanta Braves,ATL,84821541,68,93,Freddie Freeman
+2016,Miami Marlins,MIA,70464500,79,82,Martin Prado
+2016,Tampa Bay Rays,TB,64120323,68,94,Evan Longoria
+2016,Milwaukee Brewers,MIL,62964319,73,89,Ryan Braun
+2017,Los Angeles Dodgers,LAD,187989811,104,58,Clayton Kershaw
+2017,Detroit Tigers,DET,180250600,64,98,Miguel Cabrera
+2017,Texas Rangers,TEX,178431396,78,84,Cole Hamels
+2017,San Francisco Giants,SF,176531278,64,98,Buster Posey
+2017,New York Mets,NYM,176284679,70,92,Yoenis Cespedes
+2017,Boston Red Sox,BOS,174287098,93,69,David Price
+2017,New York Yankees,NYY,170389199,91,71,CC Sabathia
+2017,Chicago Cubs,CHC,170088502,92,70,Jason Heyward
+2017,Washington Nationals,WSH,162742157,97,65,Jayson Werth
+2017,Toronto Blue Jays,TOR,162353367,76,86,Troy Tulowitzki
+2017,Baltimore Orioles,BAL,161684185,75,87,Chris Davis
+2017,Seattle Mariners,SEA,155207720,78,84,Felix Hernandez
+2017,St. Louis Cardinals,STL,146630000,83,79,Adam Wainwright
+2017,Los Angeles Angels,LAA,143965833,80,82,Albert Pujols
+2017,Atlanta Braves,ATL,137339527,72,90,Matt Kemp
+2017,Kansas City Royals,KC,132091916,80,82,Alex Gordon
+2017,Houston Astros,HOU,127443900,101,61,Brian McCann
+2017,Cleveland Indians,CLE,115991166,102,60,Edwin Encarnacion
+2017,Miami Marlins,MIA,115348302,77,85,Giancarlo Stanton
+2017,Chicago White Sox,CWS,109591167,67,95,James Shields
+2017,Colorado Rockies,COL,101513571,87,75,Carlos Gonzalez
+2017,Minnesota Twins,MIN,100787500,85,77,Joe Mauer
+2017,Pittsburgh Pirates,PIT,94637833,75,87,Andrew McCutchen
+2017,Arizona Diamondbacks,ARI,90730499,93,69,Zack Greinke
+2017,Philadelphia Phillies,PHI,87418378,66,96,Jeremy Hellickson
+2017,Cincinnati Reds,CIN,82375785,68,94,Joey Votto
+2017,Oakland Athletics,ATH,70601667,75,87,Ryan Madson
+2017,Tampa Bay Rays,TB,69982520,80,82,Evan Longoria
+2017,Milwaukee Brewers,MIL,61020089,86,76,Ryan Braun
+2017,San Diego Padres,SD,34574400,71,91,Jered Weaver
+2018,Boston Red Sox,BOS,235649368,108,54,David Price
+2018,San Francisco Giants,SF,208509901,73,89,Buster Posey
+2018,Los Angeles Dodgers,LAD,186138211,92,71,Clayton Kershaw
+2018,Chicago Cubs,CHC,183463459,95,68,Yu Darvish
+2018,Washington Nationals,WSH,181586759,82,80,Bryce Harper
+2018,Los Angeles Angels,LAA,174592209,80,82,Mike Trout
+2018,New York Yankees,NYY,168541038,100,62,Giancarlo Stanton
+2018,Toronto Blue Jays,TOR,162664502,73,89,Russell Martin
+2018,Seattle Mariners,SEA,162480174,89,73,Felix Hernandez
+2018,St. Louis Cardinals,STL,161005146,88,74,Yadier Molina
+2018,Houston Astros,HOU,159529730,103,59,Justin Verlander
+2018,New York Mets,NYM,155765125,77,85,Yoenis Cespedes
+2018,Texas Rangers,TEX,144498078,67,95,Shin-Soo Choo
+2018,Baltimore Orioles,BAL,143600045,47,115,Chris Davis
+2018,Colorado Rockies,COL,141339833,91,72,Ian Desmond
+2018,Cleveland Indians,CLE,137346173,91,71,Josh Donaldson
+2018,Arizona Diamondbacks,ARI,132495446,82,80,Zack Greinke
+2018,Minnesota Twins,MIN,131374996,78,84,Joe Mauer
+2018,Kansas City Royals,KC,129967987,58,104,Alex Gordon
+2018,Detroit Tigers,DET,129917192,64,98,Miguel Cabrera
+2018,Atlanta Braves,ATL,120542785,90,72,Freddie Freeman
+2018,Cincinnati Reds,CIN,101185579,67,95,Joey Votto
+2018,Miami Marlins,MIA,98826644,63,98,Martin Prado
+2018,Philadelphia Phillies,PHI,96848371,80,82,Jake Arrieta
+2018,San Diego Padres,SD,96131798,66,96,Eric Hosmer
+2018,Milwaukee Brewers,MIL,90237112,96,67,Ryan Braun
+2018,Pittsburgh Pirates,PIT,87860654,82,79,Francisco Cervelli
+2018,Tampa Bay Rays,TB,78231049,90,72,Kevin Kiermaier
+2018,Chicago White Sox,CWS,72177640,62,100,James Shields
+2018,Oakland Athletics,ATH,68534631,97,65,Khris Davis
+2019,Boston Red Sox,BOS,222171123,84,78,David Price
+2019,Chicago Cubs,CHC,210358488,84,78,Jon Lester
+2019,New York Yankees,NYY,208084848,103,59,Giancarlo Stanton
+2019,Los Angeles Dodgers,LAD,196729548,106,56,Clayton Kershaw
+2019,San Francisco Giants,SF,178286222,77,85,Johnny Cueto
+2019,St. Louis Cardinals,STL,162830430,91,71,Yadier Molina
+2019,Washington Nationals,WSH,161877935,93,69,Max Scherzer
+2019,Houston Astros,HOU,160774666,107,55,Justin Verlander
+2019,Los Angeles Angels,LAA,159378583,72,90,Mike Trout
+2019,New York Mets,NYM,158999270,86,76,Robinson Cano
+2019,Seattle Mariners,SEA,150906143,68,94,Yoenis Cespedes
+2019,Colorado Rockies,COL,147433009,71,91,Nolan Arenado
+2019,Philadelphia Phillies,PHI,140711962,81,81,Jake Arrieta
+2019,Texas Rangers,TEX,127660652,78,84,Jacoby Ellsbury
+2019,Cincinnati Reds,CIN,126423214,75,87,Joey Votto
+2019,Milwaukee Brewers,MIL,124755400,89,73,Yasmani Grandal
+2019,Arizona Diamondbacks,ARI,123932983,85,77,Zack Greinke
+2019,Minnesota Twins,MIN,121276933,101,61,Nelson Cruz
+2019,Cleveland Indians,CLE,119241701,93,69,Carlos Santana
+2019,Detroit Tigers,DET,116478400,47,114,Miguel Cabrera
+2019,Atlanta Braves,ATL,113778369,97,65,Josh Donaldson
+2019,Toronto Blue Jays,TOR,112037006,67,95,Justin Smoak
+2019,Kansas City Royals,KC,100658316,59,103,Alex Gordon
+2019,San Diego Padres,SD,99205017,70,92,Eric Hosmer
+2019,Oakland Athletics,ATH,92318333,97,65,Khris Davis
+2019,Chicago White Sox,CWS,89354534,72,89,Jose Abreu
+2019,Pittsburgh Pirates,PIT,76589154,69,93,Francisco Cervelli
+2019,Baltimore Orioles,BAL,72722906,54,108,Chris Davis
+2019,Miami Marlins,MIA,72449404,57,105,Wei-Yin Chen
+2019,Tampa Bay Rays,TB,60444931,96,66,Charlie Morton
+2020,New York Yankees,NYY,214291339,33,27,Gerrit Cole
+2020,Houston Astros,HOU,212321933,29,31,Justin Verlander
+2020,Los Angeles Dodgers,LAD,189065000,43,17,Mookie Betts
+2020,Chicago Cubs,CHC,188959500,34,26,Yu Darvish
+2020,Los Angeles Angels,LAA,176329344,26,34,Mike Trout
+2020,St. Louis Cardinals,STL,160781766,30,28,Paul Goldschmidt
+2020,Washington Nationals,WSH,159242411,26,34,Stephen Strasburg
+2020,Philadelphia Phillies,PHI,152877962,28,32,Bryce Harper
+2020,Atlanta Braves,ATL,149466875,35,25,Freddie Freeman
+2020,San Francisco Giants,SF,144994027,29,31,Jacoby Ellsbury
+2020,Cincinnati Reds,CIN,143143673,31,29,Joey Votto
+2020,New York Mets,NYM,142288337,26,34,Yoenis Cespedes
+2020,San Diego Padres,SD,140317600,37,23,Manny Machado
+2020,Texas Rangers,TEX,137834500,22,38,Shin-Soo Choo
+2020,Colorado Rockies,COL,136399833,26,34,Nolan Arenado
+2020,Minnesota Twins,MIN,127610333,36,24,Josh Donaldson
+2020,Chicago White Sox,CWS,120898499,35,25,Yasmani Grandal
+2020,Boston Red Sox,BOS,120361000,24,36,David Price
+2020,Milwaukee Brewers,MIL,97535926,29,31,Lorenzo Cain
+2020,Detroit Tigers,DET,96832300,23,35,Miguel Cabrera
+2020,Oakland Athletics,ATH,94318433,36,24,Khris Davis
+2020,Toronto Blue Jays,TOR,92582371,32,28,Hyun-Jin Ryu
+2020,Cleveland Indians,CLE,89004234,35,25,Carlos Santana
+2020,Arizona Diamondbacks,ARI,86471066,25,35,Starling Marte
+2020,Kansas City Royals,KC,83278225,26,34,Yasmany Tomas
+2020,Seattle Mariners,SEA,70343800,27,33,Kyle Seager
+2020,Tampa Bay Rays,TB,65812166,40,20,Charlie Morton
+2020,Baltimore Orioles,BAL,52415682,25,35,Chris Davis
+2020,Miami Marlins,MIA,47861700,31,29,Chris Sale
+2020,Pittsburgh Pirates,PIT,42119000,19,41,Gregory Polanco
+2021,Los Angeles Dodgers,LAD,241372403,106,56,David Price
+2021,New York Yankees,NYY,201074956,92,70,Gerrit Cole
+2021,New York Mets,NYM,186001814,77,85,Jacob deGrom
+2021,Los Angeles Angels,LAA,180609676,77,85,Mike Trout
+2021,Washington Nationals,WSH,179557685,65,97,Max Scherzer
+2021,Boston Red Sox,BOS,179540260,92,70,Justin Verlander
+2021,Houston Astros,HOU,176495417,95,67,Zack Greinke
+2021,San Diego Padres,SD,175713986,79,83,Manny Machado
+2021,Philadelphia Phillies,PHI,174808832,82,80,Bryce Harper
+2021,St. Louis Cardinals,STL,164972833,90,72,Nolan Arenado
+2021,Chicago Cubs,CHC,156481585,71,91,Jason Heyward
+2021,San Francisco Giants,SF,149937613,107,55,Buster Posey
+2021,Toronto Blue Jays,TOR,139646569,91,71,George Springer
+2021,Atlanta Braves,ATL,132458375,88,73,Freddie Freeman
+2021,Chicago White Sox,CWS,127148334,93,69,Yasmani Grandal
+2021,Minnesota Twins,MIN,125153166,73,89,Josh Donaldson
+2021,Cincinnati Reds,CIN,123575488,83,79,Joey Votto
+2021,Colorado Rockies,COL,110309500,74,87,Charlie Blackmon
+2021,Texas Rangers,TEX,97796971,60,102,Chris Davis
+2021,Arizona Diamondbacks,ARI,94394792,52,110,Madison Bumgarner
+2021,Milwaukee Brewers,MIL,93818038,95,67,Lorenzo Cain
+2021,Kansas City Royals,KC,89496700,74,88,Danny Duffy
+2021,Seattle Mariners,SEA,83603100,90,72,Kyle Seager
+2021,Oakland Athletics,ATH,82983674,86,76,Elvis Andrus
+2021,Detroit Tigers,DET,80866200,77,85,Miguel Cabrera
+2021,Tampa Bay Rays,TB,66820709,100,62,Kevin Kiermaier
+2021,Miami Marlins,MIA,57481750,67,95,Starling Marte
+2021,Baltimore Orioles,BAL,56158500,52,110,Trey Mancini
+2021,Cleveland Indians,CLE,51269100,80,82,Trevor Rosenthal
+2021,Pittsburgh Pirates,PIT,45599000,61,101,Gregory Polanco
+2022,Los Angeles Dodgers,LAD,285508333,111,51,David Price
+2022,New York Mets,NYM,255919999,101,61,Max Scherzer
+2022,New York Yankees,NYY,240290714,99,63,Gerrit Cole
+2022,Philadelphia Phillies,PHI,221738462,87,75,Zack Wheeler
+2022,San Diego Padres,SD,202172618,89,73,Manny Machado
+2022,Boston Red Sox,BOS,201616000,78,84,Chris Sale
+2022,Chicago White Sox,CWS,190760734,81,81,Lance Lynn
+2022,Los Angeles Angels,LAA,187613094,73,89,Anthony Rendon
+2022,Atlanta Braves,ATL,175335000,101,61,Charlie Morton
+2022,Houston Astros,HOU,171639599,106,56,Jose Altuve
+2022,Toronto Blue Jays,TOR,164470905,92,70,George Springer
+2022,St. Louis Cardinals,STL,150746666,93,69,Nolan Arenado
+2022,San Francisco Giants,SF,142292500,81,81,Carlos Rodon
+2022,Chicago Cubs,CHC,141810000,74,88,Marcus Stroman
+2022,Colorado Rockies,COL,137852166,68,94,Charlie Blackmon
+2022,Texas Rangers,TEX,134961333,68,94,Corey Seager
+2022,Minnesota Twins,MIN,130984524,78,84,Carlos Correa
+2022,Detroit Tigers,DET,128640000,66,96,Miguel Cabrera
+2022,Milwaukee Brewers,MIL,128581128,86,76,Christian Yelich
+2022,Washington Nationals,WSH,114623095,55,107,Stephen Strasburg
+2022,Cincinnati Reds,CIN,113580000,62,100,Joey Votto
+2022,Seattle Mariners,SEA,92745714,90,72,Robbie Ray
+2022,Kansas City Royals,KC,84610000,65,97,Salvador Perez
+2022,Miami Marlins,MIA,79500000,69,93,Jorge Soler
+2022,Arizona Diamondbacks,ARI,77393333,74,88,Madison Bumgarner
+2022,Tampa Bay Rays,TB,75347813,86,76,Kevin Kiermaier
+2022,Cleveland Guardians,CLE,57710000,92,70,Jose Ramirez
+2022,Baltimore Orioles,BAL,41421166,83,79,Trey Mancini
+2022,Pittsburgh Pirates,PIT,38575000,62,100,Roberto Perez
+2022,Oakland Athletics,ATH,32548334,60,102,Stephen Piscotty
+2023,New York Mets,NYM,334233332,75,87,Justin Verlander
+2023,New York Yankees,NYY,268954047,82,80,Aaron Judge
+2023,San Diego Padres,SD,236962024,82,80,Xander Bogaerts
+2023,Philadelphia Phillies,PHI,232424939,90,72,Trea Turner
+2023,Los Angeles Dodgers,LAD,217612634,100,62,Freddie Freeman
+2023,Toronto Blue Jays,TOR,205680777,89,73,George Springer
+2023,Los Angeles Angels,LAA,204088094,73,89,Anthony Rendon
+2023,Atlanta Braves,ATL,193477500,104,58,Matt Olson
+2023,Texas Rangers,TEX,183578160,90,72,Corey Seager
+2023,Houston Astros,HOU,180888333,90,72,Alex Bregman
+2023,San Francisco Giants,SF,175590000,79,83,Joc Pederson
+2023,Chicago White Sox,CWS,174911666,61,101,Lance Lynn
+2023,Chicago Cubs,CHC,170365000,83,79,Marcus Stroman
+2023,Boston Red Sox,BOS,167533182,78,84,Chris Sale
+2023,Colorado Rockies,COL,166250466,59,103,Kris Bryant
+2023,St. Louis Cardinals,STL,147770834,71,91,Nolan Arenado
+2023,Minnesota Twins,MIN,141271190,87,75,Carlos Correa
+2023,Seattle Mariners,SEA,129814047,88,74,Robbie Ray
+2023,Milwaukee Brewers,MIL,108644960,92,70,Christian Yelich
+2023,Detroit Tigers,DET,105338500,78,84,Miguel Cabrera
+2023,Arizona Diamondbacks,ARI,103763571,84,78,Madison Bumgarner
+2023,Miami Marlins,MIA,81075000,84,78,Jorge Soler
+2023,Washington Nationals,WSH,78983095,71,91,Stephen Strasburg
+2023,Kansas City Royals,KC,75825000,56,106,Salvador Perez
+2023,Cleveland Guardians,CLE,75010000,76,86,Josh Bell
+2023,Cincinnati Reds,CIN,70624500,82,80,Joey Votto
+2023,Tampa Bay Rays,TB,64652911,99,63,Zach Eflin
+2023,Pittsburgh Pirates,PIT,60787500,76,86,Ke'Bryan Hayes
+2023,Baltimore Orioles,BAL,52157966,101,61,James McCann
+2023,Oakland Athletics,ATH,43145000,50,112,Aledmys Diaz
+2024,New York Mets,NYM,307792124,89,73,Francisco Lindor
+2024,New York Yankees,NYY,305444574,94,68,Aaron Judge
+2024,Houston Astros,HOU,249515241,88,73,Justin Verlander
+2024,Philadelphia Phillies,PHI,245200613,95,67,Trea Turner
+2024,Texas Rangers,TEX,229972500,78,84,Max Scherzer
+2024,Atlanta Braves,ATL,229257043,89,73,Matt Olson
+2024,Toronto Blue Jays,TOR,227175884,74,88,Kevin Gausman
+2024,Los Angeles Dodgers,LAD,225204220,98,61,Shohei Ohtani
+2024,Chicago Cubs,CHC,224452543,83,79,Cody Bellinger
+2024,San Francisco Giants,SF,198419831,80,82,Blake Snell
+2024,Boston Red Sox,BOS,177760347,81,81,Rafael Devers
+2024,St. Louis Cardinals,STL,175517567,83,79,Nolan Arenado
+2024,Los Angeles Angels,LAA,167918094,63,99,Anthony Rendon
+2024,Arizona Diamondbacks,ARI,165611416,89,73,Jordan Montgomery
+2024,San Diego Padres,SD,160549153,93,69,Xander Bogaerts
+2024,Colorado Rockies,COL,142285285,61,101,Kris Bryant
+2024,Seattle Mariners,SEA,141365433,85,77,Luis Castillo
+2024,Chicago White Sox,CWS,128990283,41,121,Yoan Moncada
+2024,Minnesota Twins,MIN,128034633,82,80,Carlos Correa
+2024,Kansas City Royals,KC,115703220,86,76,Salvador Perez
+2024,Washington Nationals,WSH,108298672,71,91,Patrick Corbin
+2024,Detroit Tigers,DET,105684833,86,76,Javier Baez
+2024,Milwaukee Brewers,MIL,104046560,93,69,Christian Yelich
+2024,Cincinnati Reds,CIN,101615833,77,85,Jeimer Candelario
+2024,Baltimore Orioles,BAL,100476440,91,71,Corbin Burnes
+2024,Cleveland Guardians,CLE,99843528,92,69,Jose Ramirez
+2024,Tampa Bay Rays,TB,98523712,80,82,Zach Eflin
+2024,Miami Marlins,MIA,96694352,62,100,Josh Bell
+2024,Pittsburgh Pirates,PIT,83272737,76,86,Marco Gonzales
+2024,Oakland Athletics,ATH,61945000,69,93,Ross Stripling
+2025,Los Angeles Dodgers,LAD,331013580,93,69,Tyler Glasnow
+2025,New York Mets,NYM,321594220,83,79,Juan Soto
+2025,New York Yankees,NYY,287547080,94,68,Aaron Judge
+2025,Philadelphia Phillies,PHI,283231784,96,66,Zack Wheeler
+2025,Toronto Blue Jays,TOR,243329047,94,68,Vladimir Guerrero
+2025,Houston Astros,HOU,218642604,87,75,Jose Altuve
+2025,Atlanta Braves,ATL,215256393,76,86,Matt Olson
+2025,Texas Rangers,TEX,214389983,81,81,Jacob deGrom
+2025,San Diego Padres,SD,209332417,90,72,Xander Bogaerts
+2025,Boston Red Sox,BOS,197964402,89,73,Rafael Devers
+2025,Chicago Cubs,CHC,192720128,92,70,Dansby Swanson
+2025,Los Angeles Angels,LAA,192402601,72,90,Anthony Rendon
+2025,Arizona Diamondbacks,ARI,184159359,80,82,Corbin Burnes
+2025,San Francisco Giants,SF,169919523,81,81,Matt Chapman
+2025,Baltimore Orioles,BAL,164267878,75,87,Trevor Rogers
+2025,Seattle Mariners,SEA,147901560,90,72,Luis Castillo
+2025,Minnesota Twins,MIN,145863554,70,92,Carlos Correa
+2025,Detroit Tigers,DET,143669965,87,75,Jack Flaherty
+2025,St. Louis Cardinals,STL,135860188,78,84,Sonny Gray
+2025,Kansas City Royals,KC,126410770,82,80,Salvador Perez
+2025,Colorado Rockies,COL,121474126,43,119,Kris Bryant
+2025,Cincinnati Reds,CIN,116673117,83,79,Nick Martinez
+2025,Washington Nationals,WSH,113027012,66,96,Nathaniel Lowe
+2025,Milwaukee Brewers,MIL,110839368,97,65,Christian Yelich
+2025,Cleveland Guardians,CLE,99590961,88,74,Jose Ramirez
+2025,Tampa Bay Rays,TB,88729437,77,85,Ha-seong Kim
+2025,Pittsburgh Pirates,PIT,83761012,71,91,Mitch Keller
+2025,Athletics,ATH,74036474,76,86,Luis Severino
+2025,Chicago White Sox,CWS,73703990,60,102,Andrew Benintendi
+2025,Miami Marlins,MIA,68004097,79,83,Sandy Alcantara
+2026,Los Angeles Dodgers,LAD,415212461,100,62,Kyle Tucker
+2026,New York Mets,NYM,381002101,74,88,Juan Soto
+2026,New York Yankees,NYY,337140544,93,68,Cody Bellinger
+2026,Philadelphia Phillies,PHI,313201706,88,74,Zack Wheeler
+2026,Toronto Blue Jays,TOR,309484438,79,83,Dylan Cease
+2026,Boston Red Sox,BOS,266101898,87,75,Garrett Crochet
+2026,San Diego Padres,SD,255992138,91,71,Xander bogaerts
+2026,Chicago Cubs,CHC,248474822,89,73,Dansby Swanson
+2026,Atlanta Braves,ATL,246555515,94,68,Austin Riley
+2026,Detroit Tigers,DET,239806674,76,86,Tarik Skubal
+2026,Houston Astros,HOU,235133199,81,81,Jose Altuve
+2026,Arizona Diamondbacks,ARI,232680420,86,76,Eduardo Rodriguez
+2026,San Francisco Giants,SF,229003270,65,97,Matt Chapman
+2026,Baltimore Orioles,BAL,217666181,79,82,Pete Alonso
+2026,Texas Rangers,TEX,202378541,80,82,Jacob DeGrom
+2026,Seattle Mariners,SEA,197631230,76,86,Luis Castillo
+2026,Los Angeles Angels,LAA,194530851,62,100,Mike Trout
+2026,Kansas City Royals,KC,183197498,69,93,Seth Lugo
+2026,Cincinnati Reds,CIN,148667572,75,87,Eugenio Suarez
+2026,Milwaukee Brewers,MIL,139000376,103,59,Brandon woodruff
+2026,Athletics,ATH,136029542,64,98,Luis Severino
+2026,Pittsburgh Pirates,PIT,134501207,82,80,Mitch Keller
+2026,Colorado Rockies,COL,131609949,58,104,Kris Bryant
+2026,Minnesota Twins,MIN,123266143,77,85,Pablo Lopez
+2026,Washington Nationals,WSH,114624471,77,85,Trevor Williams
+2026,St. Louis Cardinals,STL,111559321,77,85,Dustin May
+2026,Chicago White Sox,CWS,108379653,84,78,Munetaka Murakami
+2026,Tampa Bay Rays,TB,108325756,98,64,Yandy Diaz
+2026,Cleveland Guardians,CLE,87827999,85,77,Jose Ramirez
+2026,Miami Marlins,MIA,81941404,80,82,Sandy Alcantara

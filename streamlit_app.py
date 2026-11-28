@@ -289,37 +289,143 @@ def cached_roster_names(team_id):
     return rosters.roster_names(team_id)
 
 
+TBC_LINK = "[The Baseball Cube](https://www.thebaseballcube.com/content/payroll_year/{year}/)"
+BLUE = "#2a78d6"          # validated categorical slot 1 (single-series charts)
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def payroll_history():
+    import payroll_history as ph
+    df = pd.DataFrame(ph.read())
+    if not df.empty:
+        df["payroll_m"] = df["payroll"] / 1e6
+    return df
+
+
+def committed_payrolls(teams, deals, fa):
+    """This app's committed future payrolls for every team (partial: only
+    salaries in salaries.csv and tracked signings)."""
+    rows = []
+    for t in teams:
+        names = list(cached_roster_names(t["id"]))
+        on = {ld.norm(n) for n in names}
+        names += [p["name"] for p in fa if p.get("signed") and p.get("new_team") == t["abbr"]
+                  and "minor league" not in (p.get("notes") or "").lower()
+                  and ld.norm(p["name"]) not in on]
+        pay = contracts.payroll(names, deals)
+        rows.append({"team": t["name"], "abbr": t["abbr"], "known": pay["known"],
+                     "players": pay["players"], "estimate": pay["estimate"],
+                     **{yr: pay["by_year"][yr] for yr in contracts.YEARS}})
+    return pd.DataFrame(rows)
+
+
+def league_bars(df, value, label):
+    import altair as alt
+    return (alt.Chart(df).mark_bar(color=BLUE, cornerRadiusEnd=4, height=14)
+            .encode(y=alt.Y("Team:N", sort="-x", title=None, axis=alt.Axis(labelLimit=220)),
+                    x=alt.X(f"{value}:Q", title=label),
+                    tooltip=["Team:N", alt.Tooltip(f"{value}:Q", title=label, format="$,.1f")])
+            .properties(height=30 * len(df)))
+
+
+def team_trend(df):
+    import altair as alt
+    base = alt.Chart(df).encode(
+        x=alt.X("Season:Q", title=None, axis=alt.Axis(format="d", tickMinStep=1)),
+        y=alt.Y("Payroll ($M):Q", title="Payroll ($M)"))
+    line = base.mark_line(color=BLUE, strokeWidth=2).encode(
+        strokeDash=alt.StrokeDash("Kind:N", legend=None, scale=alt.Scale(
+            domain=["Actual", "Committed so far"], range=[[1, 0], [5, 4]])),
+        detail="Kind:N")
+    dots = base.mark_circle(color=BLUE, size=64).encode(tooltip=[
+        alt.Tooltip("Season:Q", format="d"), "Kind:N",
+        alt.Tooltip("Payroll ($M):Q", format="$,.1f")])
+    return (line + dots).properties(height=320)
+
+
 def payrolls_tab():
     teams = cached_teams()
     deals = contracts.load_contracts()
     fa = ld.load()
-    y = contracts.PAYROLL_YEAR
-    rows = []
+    hist = payroll_history()
     with st.spinner("Loading all 30 rosters…"):
-        for t in teams:
-            names = list(cached_roster_names(t["id"]))
-            on = {ld.norm(n) for n in names}
-            names += [p["name"] for p in fa if p.get("signed") and p.get("new_team") == t["abbr"]
-                      and "minor league" not in (p.get("notes") or "").lower()
-                      and ld.norm(p["name"]) not in on]
-            pay = contracts.payroll(names, deals)
-            rows.append({"Team": t["name"], f"{y} committed": pay["by_year"][y],
-                         "Salaries entered": f"{pay['known']} / {pay['players']}",
-                         f"{y} estimate": pay["estimate"],
-                         **{f"{yr} committed": pay["by_year"][yr] for yr in contracts.YEARS[1:]}})
-    df = pd.DataFrame(rows).sort_values(f"{y} committed", ascending=False)
-    money_cols = [c for c in df if c not in ("Team", "Salaries entered")]
-    st.subheader(f"💰 Team payrolls, {contracts.YEARS[0]}–{contracts.YEARS[-1]}")
-    st.caption(PAYROLL_NOTE)
-    entered = sum(1 for c in deals.values() if c["source"] == "salaries.csv")
-    if entered < 300:
-        st.info(f"Only {entered} players have salaries in salaries.csv so far (plus "
-                f"{len(deals) - entered} tracked free agent signings), so most payrolls are "
-                "incomplete. Add salaries with `python fa_tracker.py salary ...` or by "
-                "filling in salaries.csv.")
-    st.dataframe(df.style.format({c: money for c in money_cols}), hide_index=True,
-                 width="stretch", height=38 + 35 * len(df))
+        future = committed_payrolls(teams, deals, fa)
+    past_years = sorted(hist["year"].unique()) if not hist.empty else []
+    last_actual = past_years[-1] if past_years else None
 
+    st.subheader("💰 MLB payrolls: past, present and future")
+    st.caption(f"Seasons {past_years[0]}–{last_actual}: final team payrolls from "
+               f"{TBC_LINK.format(year=last_actual)} (used with credit, per its FAQ). "
+               f"{contracts.YEARS[0]}–{contracts.YEARS[-1]}: money already committed that this "
+               f"app knows about (tracked signings, contract news and salaries.csv), so these "
+               f"are partial until more contracts are entered." if past_years else PAYROLL_NOTE)
+
+    # ---- one season, all 30 teams ----
+    seasons = past_years + contracts.YEARS
+    season = st.select_slider("Season", options=seasons,
+                              value=last_actual or contracts.PAYROLL_YEAR, key="pay_season")
+    if season in past_years:
+        d = hist[hist["year"] == season].sort_values("payroll", ascending=False)
+        table = pd.DataFrame({
+            "Rank": range(1, len(d) + 1), "Team": d["team"].values,
+            "Payroll ($M)": d["payroll_m"].round(2).values,
+            "W-L": (d["wins"].astype(str) + "-" + d["losses"].astype(str)).values,
+            "Top salary": d["top_salary"].values})
+        a, b = st.columns([3, 2])
+        with a:
+            st.markdown(f"**{season} payrolls** · total ${d['payroll_m'].sum():,.0f}M · "
+                        f"average ${d['payroll_m'].mean():,.1f}M · source: "
+                        f"{TBC_LINK.format(year=season)}")
+            st.altair_chart(league_bars(table, "Payroll ($M)", "Payroll ($M)"), width="stretch")
+        with b:
+            st.dataframe(table.style.format({"Payroll ($M)": "${:,.2f}M"}),
+                         hide_index=True, width="stretch", height=38 + 35 * len(table))
+    else:
+        d = future.sort_values(season, ascending=False)
+        table = pd.DataFrame({
+            "Team": d["team"].values, "Committed ($M)": d[season].round(2).values,
+            "Salaries entered": [f"{k} / {n}" for k, n in zip(d["known"], d["players"])]})
+        if season == contracts.PAYROLL_YEAR:
+            table[f"Estimate ($M)"] = d["estimate"].round(2).values
+        st.warning(f"{season} is a future season: these are only the salaries this app knows "
+                   f"about so far, not full payrolls. " + PAYROLL_NOTE)
+        a, b = st.columns([3, 2])
+        with a:
+            st.altair_chart(league_bars(table, "Committed ($M)", f"{season} committed ($M)"),
+                            width="stretch")
+        with b:
+            fmt = {c: "${:,.2f}M" for c in table if "($M)" in c}
+            st.dataframe(table.style.format(fmt), hide_index=True, width="stretch",
+                         height=38 + 35 * len(table))
+
+    # ---- one team over time ----
+    st.divider()
+    names = [t["name"] for t in teams]
+    team = st.selectbox("Team history", names, key="pay_team",
+                        index=names.index("New York Mets") if "New York Mets" in names else 0)
+    abbr = next(t["abbr"] for t in teams if t["name"] == team)
+    trend = []
+    if not hist.empty:
+        h = hist[hist["abbr"] == abbr]
+        trend += [{"Season": int(r.year), "Payroll ($M)": round(r.payroll_m, 2), "Kind": "Actual",
+                   "Team name then": r.team} for r in h.itertuples()]
+    row = future[future["abbr"] == abbr]
+    if not row.empty:
+        trend += [{"Season": yr, "Payroll ($M)": round(float(row.iloc[0][yr]), 2),
+                   "Kind": "Committed so far", "Team name then": team} for yr in contracts.YEARS]
+    tdf = pd.DataFrame(trend)
+    if not tdf.empty:
+        st.markdown(f"**{team} payroll by season** · solid = actual payroll, dashed = money "
+                    f"committed so far for future seasons (partial)")
+        st.altair_chart(team_trend(tdf), width="stretch")
+        with st.expander("Table view"):
+            st.dataframe(tdf.sort_values("Season", ascending=False)
+                         .style.format({"Payroll ($M)": "${:,.2f}M"}),
+                         hide_index=True, width="stretch")
+
+    # ---- contracts read from the news ----
+    st.divider()
+    y = contracts.PAYROLL_YEAR
     news = [c for c in deals.values() if c["notes"].startswith("News")]
     st.subheader(f"📰 Contracts picked up from the news ({len(news)})")
     st.caption("Extensions, arbitration deals and other signings read automatically from "
