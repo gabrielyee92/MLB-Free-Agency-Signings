@@ -202,6 +202,17 @@ def stats_of(r, group, minors):
     return (r.get("milb", {}) if minors else r).get(group) or {}
 
 
+@st.cache_data(ttl=3600, show_spinner=False)
+def last_season_salaries():
+    """(season, {player: $M}) for the highest salaries listed by The Baseball Cube."""
+    import payroll_history as ph
+    top = ph.read_top()
+    if not top:
+        return None, {}
+    season = max(r["year"] for r in top)
+    return season, {ld.norm(r["player"]): r["salary"] / 1e6 for r in top if r["year"] == season}
+
+
 def player_cols(r, c, minors, hand):
     cols = {"Player": r["name"], "Pos": r["pos"], "Age": r["age"], hand[0]: r[hand[1]]}
     if minors:
@@ -210,6 +221,9 @@ def player_cols(r, c, minors, hand):
     y = contracts.PAYROLL_YEAR
     pay = contracts.salary(c, y)
     est = bool(pay) and y not in c["by_year"] and not c["years"]   # pre-arb at league min
+    last_y, last = last_season_salaries()
+    if last_y:
+        cols[f"{last_y} salary"] = money(last.get(ld.norm(r["name"])))
     return cols | {"Status": r["status"],
                    f"{y} salary": (money(pay) + (" (min, est.)" if est else "")) if pay else "–",
                    "AAV": money(c["aav_m"]) if c else "–",
@@ -490,8 +504,14 @@ def rosters_tab():
                                             "Deal": deal(p) if p["signed"] else ""} for p in outgoing]),
                              hide_index=True, width="stretch")
 
-        st.caption("Green rows = signed this offseason. Salaries come from salaries.csv and "
-                   "this offseason's tracked signings; – = no salary entered yet.")
+        last_y, _ = last_season_salaries()
+        st.caption("Green rows = signed this offseason. "
+                   + (f"{last_y} salary: the ~100 highest {last_y} salaries, from "
+                      f"[The Baseball Cube](https://www.thebaseballcube.com/content/payroll_year/{last_y}/). "
+                      if last_y else "")
+                   + f"{contracts.PAYROLL_YEAR} salary, AAV, total and years: this offseason's "
+                   "tracked signings, contracts from the news and salaries.csv. "
+                   "– = not known yet.")
         if data["in_season"]:
             mlb_note = f"Today's 26-man active roster plus the injured list · {season} MLB stats"
         else:
