@@ -454,6 +454,136 @@ def payrolls_tab():
             hide_index=True, width="stretch")
 
 
+# ---------- Trades tab ----------
+
+TRADES_REFRESH = "60s"
+
+
+@st.cache_data(ttl=60, show_spinner=False)
+def cached_trades():
+    import trades
+    return trades.recent_trades()
+
+
+@st.cache_data(ttl=600, show_spinner=False)
+def cached_trade_players(ids):
+    import trades
+    return trades.players(list(ids))
+
+
+@st.cache_data(ttl=300, show_spinner=False)
+def recent_news_titles(pages=4):
+    import html as _html
+    import xml.etree.ElementTree as ET
+    out = []
+    for page in range(1, pages + 1):
+        url = ld.NEWS_FEED if page == 1 else f"{ld.NEWS_FEED}?paged={page}"
+        try:
+            for it in ET.fromstring(ld.fetch(url)).iter("item"):
+                out.append((_html.unescape(it.findtext("title") or ""), it.findtext("link")))
+        except Exception:
+            break
+    return out
+
+
+def nickname(team_name):
+    return next((n for n in ld.TEAMS if n in team_name), team_name)
+
+
+def trade_label(t):
+    teams = " ⇄ ".join(nickname(n) for n in t["teams"].values())
+    names = ", ".join(m["name"] for m in t["moves"])
+    return f"{t['date'][5:].replace('-', '/')} · {teams}: {names}"
+
+
+def trades_tab():
+    import payroll_history as ph
+    import trades
+
+    @st.fragment(run_every=TRADES_REFRESH)
+    def view():
+        all_trades = cached_trades()
+        st.subheader(f"🔄 Trades this offseason ({len(all_trades)})")
+        st.caption("Official trades from MLB's transaction feed, checked every minute. Fit and "
+                   "impact notes compare each player's 2026 stats with the players at his "
+                   "position on each team (OPS for hitters with 100+ PA, ERA for pitchers with "
+                   "20+ IP). They're simple comparisons, not projections.")
+        if not all_trades:
+            st.info("No trades yet this offseason.")
+            return
+        labels = [trade_label(t) for t in all_trades]
+        pick = st.selectbox("Trade", labels, key="trade_pick")
+        t = all_trades[labels.index(pick)]
+
+        info = cached_trade_players(tuple(m["id"] for m in t["moves"]))
+        hist, top = ph.read(), ph.read_top()
+        last_y, last_sal = last_season_salaries()
+        deals = contracts.load_contracts()
+        y = contracts.PAYROLL_YEAR
+
+        st.markdown(f"**{t['description']}**  ·  {t['date']}")
+        story = trades.story_link(t, recent_news_titles())
+        if story:
+            st.markdown(f"📰 [{story[0]}]({story[1]}) (MLB Trade Rumors)")
+
+        # ---- each team's side ----
+        shift = trades.age_shift(t, info)
+        cols = st.columns(len(t["teams"]))
+        for col, (tid, tname) in zip(cols, t["teams"].items()):
+            rec, pay, label = trades.team_context(trades.abbr(tname), hist, top)
+            gets = [m["name"] for m in t["moves"] if m["to_id"] == tid]
+            gives = [m["name"] for m in t["moves"] if m["from_id"] == tid]
+            with col, st.container(border=True):
+                st.markdown(f"#### {tname}")
+                if rec:
+                    st.caption(f"{rec} · {label} · {last_y or ''} payroll {money(pay)}")
+                st.markdown("**Gets:** " + (", ".join(gets) or "cash or future considerations"))
+                st.markdown("**Gives up:** " + (", ".join(gives) or "cash or future considerations"))
+                if tname in shift and abs(shift[tname]) >= 1:
+                    st.markdown(f"**Age:** gets {'younger' if shift[tname] < 0 else 'older'} by "
+                                f"{abs(shift[tname]):.1f} years on average in this deal")
+                money_out = sum(last_sal.get(ld.norm(n), 0) for n in gives)
+                money_in = sum(last_sal.get(ld.norm(n), 0) for n in gets)
+                if money_out or money_in:
+                    st.markdown(f"**{last_y} salary:** {money(money_in) if money_in else '$0'} in, "
+                                f"{money(money_out) if money_out else '$0'} out (top earners only)")
+
+        # ---- each player ----
+        for m in t["moves"]:
+            p = info.get(m["id"])
+            if not p:
+                continue
+            new_rows = cached_team_roster(m["to_id"], ())["rows"]
+            old_rows = cached_team_roster(m["from_id"], ())["rows"]
+            c = deals.get(ld.norm(p["name"]))
+            pay_bits = []
+            if last_sal.get(ld.norm(p["name"])):
+                pay_bits.append(f"{last_y} salary {money(last_sal[ld.norm(p['name'])])}")
+            if c and contracts.salary(c, y):
+                pay_bits.append(f"{y} salary {money(contracts.salary(c, y))}")
+            with st.container(border=True):
+                st.markdown(f"### {p['name']}  ·  {nickname(m['from'])} → {nickname(m['to'])}")
+                st.caption(f"{p['pos']} · {trades.ROLE_NAME.get(trades.role(p), trades.role(p))} · "
+                           f"age {p['age']} · {trades.stat_text(p)}"
+                           + (" · " + " · ".join(pay_bits) if pay_bits else ""))
+                a, b = st.columns(2)
+                with a:
+                    st.markdown(f"**How he fits the {nickname(m['to'])}**")
+                    st.markdown("\n".join(f"- {x}" for x in trades.fit(p, new_rows, m["to"])))
+                with b:
+                    st.markdown(f"**What it means for the {nickname(m['from'])}**")
+                    st.markdown("\n".join(f"- {x}" for x in trades.impact(p, old_rows, m["from"])))
+
+        with st.expander(f"All {len(all_trades)} trades"):
+            st.dataframe(pd.DataFrame([{"Date": x["date"],
+                                        "Teams": " ⇄ ".join(nickname(n) for n in x["teams"].values()),
+                                        "Players": ", ".join(f"{mv['name']} → {nickname(mv['to'])}"
+                                                             for mv in x["moves"])}
+                                       for x in all_trades]), hide_index=True, width="stretch")
+
+    view()
+
+
 def rosters_tab():
     @st.fragment(run_every=ROSTER_REFRESH)
     def view():
@@ -550,11 +680,13 @@ def render():
                    f"or ${BIG_AAV_M}M+ per year.")
 
     st.title("⚾ MLB Free Agency Tracker")
-    fa_tab, team_tab, pay_tab = st.tabs(["Free Agency", "Team Rosters", "Payrolls"])
+    fa_tab, team_tab, trade_tab, pay_tab = st.tabs(["Free Agency", "Team Rosters", "Trades", "Payrolls"])
     with fa_tab:
         free_agency_tab(q, pos, big_only, hide_minors)
     with team_tab:
         rosters_tab()
+    with trade_tab:
+        trades_tab()
     with pay_tab:
         payrolls_tab()
 

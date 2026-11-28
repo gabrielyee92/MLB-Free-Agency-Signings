@@ -291,7 +291,7 @@ if __name__ == "__main__":
         shared = sys.__dict__.setdefault("_fa_tracker_shared", {})
         if shared.get("code_stamp") != stamp:
             for name in ("fa_tracker", "live_dashboard", "contracts", "rosters",
-                         "news_contracts", "payroll_history", "streamlit_app"):
+                         "news_contracts", "payroll_history", "trades", "streamlit_app"):
                 if name in sys.modules:
                     importlib.reload(sys.modules[name])
             shared["code_stamp"] = stamp

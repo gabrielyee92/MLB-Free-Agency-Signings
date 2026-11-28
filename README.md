@@ -91,3 +91,12 @@ Payrolls follow each team's current 40-man roster, so traded players' salaries m
 ### Payroll history
 
 `payroll_history.csv` holds final team payrolls for 1988-2026 from [The Baseball Cube](https://www.thebaseballcube.com/content/payroll_year/2026/), used with credit as its FAQ allows (team totals only). Refresh a season after it ends with `python payroll_history.py 2027` (it reads one page every 10 seconds). The Payrolls tab ranks all teams for any season, shows each team's payroll history, and adds the money already committed for 2027-2032.
+
+## Trades
+
+The **Trades** tab lists every official trade this offseason (MLB's transaction feed, checked every minute). For each trade it shows each team's side (record, payroll, players in and out, whether it got younger or older), a link to the MLB Trade Rumors story, and for every player:
+
+- **How he fits his new team**: where his 2026 stats rank among the team's players at his position (OPS for hitters with 100+ PA, ERA for pitchers with 20+ IP) and the likely role (starter, platoon, bench; rotation spot; bullpen leverage), or prospect/depth if he has little MLB time.
+- **What it means for his old team**: where he ranked there, who's next in line, or whether it leaves a hole.
+
+These are simple comparisons of last season's stats, not projections.
