@@ -282,7 +282,19 @@ def running_in_streamlit():
 
 if __name__ == "__main__":
     if running_in_streamlit():
-        # `streamlit run fa_tracker.py` (e.g. Streamlit Community Cloud)
+        # `streamlit run fa_tracker.py` (e.g. Streamlit Community Cloud).
+        # Streamlit re-runs this file after a push but keeps the modules it
+        # imports, so reload them when any .py file in the project changed.
+        import importlib
+        here = Path(__file__).parent
+        stamp = max(f.stat().st_mtime for f in here.glob("*.py"))
+        shared = sys.__dict__.setdefault("_fa_tracker_shared", {})
+        if shared.get("code_stamp") != stamp:
+            for name in ("fa_tracker", "live_dashboard", "contracts", "rosters",
+                         "news_contracts", "streamlit_app"):
+                if name in sys.modules:
+                    importlib.reload(sys.modules[name])
+            shared["code_stamp"] = stamp
         import streamlit_app
         streamlit_app.render()
     else:
