@@ -1,7 +1,7 @@
 """Live MLB Free Agency Dashboard.
 
     python live_dashboard.py              opens http://localhost:8000
-    python live_dashboard.py --poll 5     check every 5 minutes (default 1)
+    python live_dashboard.py --poll 5     check every 5 minutes (default 0.5 = 30 seconds)
     python live_dashboard.py --no-news    official signings only
 
 Three ways a signing reaches the board, each with a pop-up:
@@ -360,7 +360,7 @@ class Handler(BaseHTTPRequestHandler):
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Live MLB free agency dashboard")
     ap.add_argument("--port", type=int, default=8000)
-    ap.add_argument("--poll", type=float, default=1, help="minutes between feed checks")
+    ap.add_argument("--poll", type=float, default=0.5, help="minutes between feed checks")
     ap.add_argument("--no-news", action="store_true", help="official MLB signings only")
     ap.add_argument("--no-browser", action="store_true", help="don't open a browser tab")
     a = ap.parse_args(argv)

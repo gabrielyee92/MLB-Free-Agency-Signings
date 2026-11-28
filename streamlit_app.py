@@ -5,7 +5,7 @@ Runs automatically when Streamlit runs fa_tracker.py (or this file).
 Tabs
   * Free Agency  - signings and who's left, big names first, with pop-ups.
                    A background checker reads MLB's official transactions and
-                   MLB Trade Rumors every minute.
+                   MLB Trade Rumors every 30 seconds.
   * Team Rosters - any team's current 40-man roster with last season's stats,
                    plus its free agent additions and losses this offseason.
 """
@@ -21,10 +21,10 @@ import live_dashboard as ld
 import rosters
 from fa_tracker import BIG_AAV_M, BIG_TOTAL_M
 
-REFRESH = "5s"           # how often the free agency board redraws
-ROSTER_REFRESH = "60s"   # how often the roster tab redraws
-ROSTER_CACHE = 300       # seconds before re-downloading a roster
-POLL_MINUTES = 1         # how often MLB / news feeds are checked
+REFRESH = "3s"           # how often the free agency board redraws
+ROSTER_REFRESH = "30s"   # how often the roster tab redraws
+ROSTER_CACHE = 60        # seconds before re-downloading a roster
+POLL_MINUTES = 0.5       # how often MLB / news feeds are checked (30 seconds)
 BANNER_MINUTES = 30      # how long a big-name banner stays up
 TZ = ZoneInfo("America/Los_Angeles")
 GOLD = "background-color: rgba(242, 193, 78, 0.22)"
@@ -136,7 +136,7 @@ def free_agency_tab(q, pos, big_only, hide_minors):
             status.append(f"MLB checked {local(data['last_check']):%I:%M:%S %p}")
         if data["last_news_check"]:
             status.append(f"news {local(data['last_news_check']):%I:%M:%S %p} PT")
-        st.caption(f"🔴 LIVE · feeds checked every minute · "
+        st.caption(f"🔴 LIVE · feeds checked every {POLL_MINUTES * 60:g} seconds · "
                    + (" · ".join(status) or "checking feeds…"))
         if data["last_error"]:
             st.warning(f"Feed check problem: {data['last_error']}")
@@ -185,7 +185,7 @@ def cached_team_roster(team_id, mlb_deals):
     return rosters.team_roster(team_id, mlb_deals)
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=600, show_spinner=False)
 def cached_player(name):
     return rosters.player(name)
 
@@ -298,7 +298,7 @@ def payroll_block(team, rows, deals):
         st.caption(PAYROLL_NOTE)
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False)
 def cached_roster_names(team_id):
     return rosters.roster_names(team_id)
 
@@ -443,7 +443,7 @@ def payrolls_tab():
     news = [c for c in deals.values() if c["notes"].startswith("News")]
     st.subheader(f"📰 Contracts picked up from the news ({len(news)})")
     st.caption("Extensions, arbitration deals and other signings read automatically from "
-               "MLB Trade Rumors stories (checked every minute). Free agent deals are on the "
+               "MLB Trade Rumors stories (checked every 30 seconds). Free agent deals are on the "
                "Free Agency tab.")
     if news:
         st.dataframe(pd.DataFrame([{
